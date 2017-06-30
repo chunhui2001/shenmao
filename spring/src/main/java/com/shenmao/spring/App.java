@@ -13,10 +13,12 @@ public class App {
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("applicationContext.xml");
 
-        MessageService messageService
-                    = (MessageService)context.getBean("messageService");
+//        MessageService messageService
+//                    = (MessageService)context.getBean("messageService");
+//
+//        MessagePrinter messagePrinter = new MessagePrinter(messageService);
 
-        MessagePrinter messagePrinter = new MessagePrinter(messageService);
+        MessagePrinter messagePrinter = context.getBean(MessagePrinter.class);
 
         messagePrinter.printMessage();
 

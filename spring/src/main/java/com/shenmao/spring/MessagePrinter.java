@@ -3,12 +3,12 @@ package com.shenmao.spring;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class MessagePrinter {
 
     final private MessageService service;
 
-//    @Autowired
+    @Autowired
     public MessagePrinter(MessageService service) {
         this.service = service;
     }
