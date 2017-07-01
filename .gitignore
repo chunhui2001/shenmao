@@ -45,3 +45,5 @@ Thumbs.db
 mybatis
 
 target
+
+dependency-reduced-pom.xml
