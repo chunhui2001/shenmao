@@ -7,6 +7,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 /**
@@ -50,6 +52,28 @@ public class Mybatis {
         System.out.println(
                 new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(user));
 
+
+        // batch insert
+        User newUser1 = new User();
+        User newUser2 = new User();
+        User newUser3 = new User();
+        User newUser4 = new User();
+
+        newUser1.setUserName("k1 ");
+        newUser2.setUserName("k2 ");
+        newUser3.setUserName("k3 ");
+        newUser4.setUserName("k4 ");
+
+        Collection<User> userList = new ArrayList<>();
+
+        userList.add(newUser1);
+        userList.add(newUser2);
+        userList.add(newUser3);
+        userList.add(newUser4);
+
+        int affectRowCount = userMapper.insertBatch(userList);
+
+        System.out.println(affectRowCount + " insert batch");
 
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -31,9 +32,15 @@ public class UserRepository implements UserMapper {
     public int insert(User record) {
         List<User> userList = new ArrayList<User>() {};
         userList.add(record);
-        int affectRowCount = sqlSessionTemplate.insert(
-                "com.shenmao.mybatis.dao.UserMapper.insertBatch", userList);
+        int affectRowCount = this.insertBatch(userList);
         return affectRowCount > 0 ? userList.get(0).getUserId() : -1;
+    }
+
+    @Override
+    public int insertBatch(Collection<User> records) {
+        int affectRowCount = sqlSessionTemplate.insert(
+                "com.shenmao.mybatis.dao.UserMapper.insertBatch", records);
+        return affectRowCount;
     }
 
     @Override
