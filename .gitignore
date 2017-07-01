@@ -46,3 +46,7 @@ spring
 target
 **/logs/
 *.swp
+
+
+
+dependency-reduced-pom.xml
