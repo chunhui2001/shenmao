@@ -1,5 +1,0 @@
-[DEBUG][main][19:52:08.289] com.shenmao.mybatis.dao.UserMapper.selectByPrimaryKey - <==      Total: 1
-[DEBUG][main][19:52:08.448] com.shenmao.mybatis.dao.UserMapper.insertBatch - ==>  Preparing: insert into SYS_USER ( USER_ID, USER_NAME, USER_PASSWORD, USER_CODE, TRUE_NAME, USER_PHONE, USER_EMAIL, STATUS, IS_MANAGE, ADD_TIME, WX_ID, DEPART_ID, ROLE_ID, USER_TYPE, LAST_LOGIN_TIME, PHONE, OPENID, SHOW_NAME, WX_REMIND, SMS_REMIND, EMAIL_REMIND ) values ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? ) 
-[DEBUG][main][19:52:08.450] com.shenmao.mybatis.dao.UserMapper.insertBatch - ==> Parameters: null, keesh.张 6767(String), null, null, null, null, null, null, null, 2017-07-01 19:52:08.425(Timestamp), null, null, null, null, null, null, null, null, null, null, null
-[DEBUG][main][19:52:08.452] com.shenmao.mybatis.dao.UserMapper.insertBatch - <==    Updates: 1
-[DEBUG][main][19:52:08.464] com.shenmao.mybatis.dao.UserMapper.updateByPrimaryKeySelective - ==>  Preparing: update SYS_USER SET USER_NAME = ?, ADD_TIME = ? where USER_ID = ? 

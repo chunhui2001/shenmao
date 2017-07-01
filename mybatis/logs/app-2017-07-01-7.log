@@ -1,7 +1,0 @@
-[DEBUG][main][00:28:00.811] com.shenmao.mybatis.dao.UserMapper.selectByPrimaryKey - ==>  Preparing: select USER_ID, USER_NAME, USER_PASSWORD, USER_CODE, TRUE_NAME, USER_PHONE, USER_EMAIL, STATUS, IS_MANAGE, ADD_TIME, WX_ID, DEPART_ID, ROLE_ID, USER_TYPE, LAST_LOGIN_TIME, PHONE, OPENID, SHOW_NAME, WX_REMIND, SMS_REMIND, EMAIL_REMIND from SYS_USER where USER_ID = ? 
-[DEBUG][main][00:28:00.850] com.shenmao.mybatis.dao.UserMapper.selectByPrimaryKey - ==> Parameters: 369(Integer)
-[DEBUG][main][00:28:00.883] com.shenmao.mybatis.dao.UserMapper.selectByPrimaryKey - <==      Total: 0
-[DEBUG][main][00:28:01.077] com.shenmao.mybatis.dao.UserMapper.insertSelective - ==>  Preparing: insert into SYS_USER ( USER_NAME, ADD_TIME ) values ( ?, ? ) 
-[DEBUG][main][00:28:01.083] com.shenmao.mybatis.dao.UserMapper.insertSelective - ==> Parameters: keesh.张(String), 2017-07-01 00:28:01.049(Timestamp)
-[DEBUG][main][00:28:01.085] com.shenmao.mybatis.dao.UserMapper.insertSelective - <==    Updates: 1
-[DEBUG][main][00:28:01.086] com.shenmao.mybatis.dao.UserMapper.selectByPrimaryKey - ==>  Preparing: select USER_ID, USER_NAME, USER_PASSWORD, USER_CODE, TRUE_NAME, USER_PHONE, USER_EMAIL, STATUS, IS_MANAGE, ADD_TIME, WX_ID, DEPART_ID, ROLE_ID, USER_TYPE, LAST_LOGIN_TIME, PHONE, OPENID, SHOW_NAME, WX_REMIND, SMS_REMIND, EMAIL_REMIND from SYS_USER where USER_ID = ? 
