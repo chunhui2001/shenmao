@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="pattern">[%-5level][%t][%d{HH:mm:ss.SSS}] %logger{36} - %msg%n</Property>
+    </Properties>
+
+    <Appenders>
+
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${pattern}"/>
+        </Console>
+
+
+        <RollingFile name="MyRollingFile" fileName="${log-path}/app.log"
+                     filePattern="${log-path}/app-%d{yyyy-MM-dd}-%i.log"
+                     append="false"
+                     ignoreExceptions="false">
+
+            <PatternLayout pattern="${pattern}" />
+
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <SizeBasedTriggeringPolicy size="1KB"/>
+            </Policies>
+
+            <DefaultRolloverStrategy max="100"/>
+
+        </RollingFile>
+
+    </Appenders>
+
+    <Loggers>
+
+        <Logger name="org.springframework.beans.factory" level="DEBUG"/>
+
+        <Logger name="com.shenmao.mybatis.dao" level="TRACE" additivity="false">
+            <AppenderRef ref="MyRollingFile" />
+            <AppenderRef ref="Console" />
+        </Logger>
+
+        <Root level="error">
+            <AppenderRef ref="Console"/>
+        </Root>
+
+    </Loggers>
+
+</Configuration>

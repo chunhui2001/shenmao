@@ -1,0 +1,2 @@
+[DEBUG][main][19:52:08.464] com.shenmao.mybatis.dao.UserMapper.updateByPrimaryKeySelective - ==> Parameters: keesh.张 6767 updated(String), 2017-07-01 00:31:47.0(Timestamp), 312(Integer)
+[DEBUG][main][19:52:08.469] com.shenmao.mybatis.dao.UserMapper.updateByPrimaryKeySelective - <==    Updates: 1
