@@ -25,6 +25,7 @@ public class UserRepository implements UserMapper {
         this.sqlSessionTemplate = sqlSessionTemplate;
     }
 
+
     @Override
     public int deleteByPrimaryKey(Integer userId) {
         return 0;

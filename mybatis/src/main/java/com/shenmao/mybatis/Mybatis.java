@@ -75,5 +75,9 @@ public class Mybatis {
 
         System.out.println(affectRowCount + " insert batch");
 
+
+
+
+
     }
 }

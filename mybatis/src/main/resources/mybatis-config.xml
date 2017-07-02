@@ -23,5 +23,7 @@
 
     <mappers>
         <mapper resource="com/shenmao/mybatis/mmapping/UserMapper.xml"/>
+        <mapper resource="com/shenmao/mybatis/mmapping/OrderMapper.xml"/>
+        <mapper resource="com/shenmao/mybatis/mmapping/OrderItemMapper.xml"/>
     </mappers>
 </configuration>
