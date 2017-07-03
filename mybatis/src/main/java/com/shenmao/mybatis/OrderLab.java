@@ -53,7 +53,7 @@ public class OrderLab {
         orderItem2.setCount(6);
         orderItem2.setProductId(10003);
         orderItem2.setPrice(new BigDecimal(6005));
-        orderItem2.setProductName("小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 小米电动车5s3 ");
+        orderItem2.setProductName("小米电动车5s3 ");
         orderItem2.setProductUnit("台");
 
 
