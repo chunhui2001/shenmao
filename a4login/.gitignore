@@ -40,10 +40,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-mybatis
-spring
-netty
-firebase
-
-target
