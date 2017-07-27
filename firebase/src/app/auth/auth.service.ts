@@ -42,6 +42,10 @@ export class AuthService {
     return this.signIn(new firebase.auth.FacebookAuthProvider());
   }
 
+  signInWithUsername(): firebase.Promise<any> {
+    return this.signIn(new firebase.auth.FacebookAuthProvider());
+  }
+
   signOut(): void {
     this.afAuth.auth.signOut();
   }

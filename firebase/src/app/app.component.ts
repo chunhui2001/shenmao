@@ -5,14 +5,17 @@ import { AuthService } from './auth';
 @Component({
   selector: 'app-root',
   styleUrls: ['./app.component.scss'],
+  // template: `
+  //   <app-header
+  //     [authenticated]="auth.authenticated$ | async"
+  //     (signOut)="auth.signOut()"></app-header>
+  //
+  //   <main class="main">
+  //     <router-outlet></router-outlet>
+  //   </main>
+  // `
   template: `
-    <app-header
-      [authenticated]="auth.authenticated$ | async"
-      (signOut)="auth.signOut()"></app-header>
-
-    <main class="main">
-      <router-outlet></router-outlet>
-    </main>
+    <router-outlet></router-outlet>
   `
 })
 export class AppComponent {

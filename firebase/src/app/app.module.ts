@@ -14,11 +14,14 @@ import { AuthModule } from './auth';
 import { FirebaseModule } from './firebase';
 import { TasksModule } from './tasks';
 
+import { LoginComponent } from './login/login.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    AppHeaderComponent
+    AppHeaderComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
