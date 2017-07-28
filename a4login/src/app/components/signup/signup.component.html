@@ -8,10 +8,38 @@
 
   <form #formData="ngForm" (onSubmit)="onSubmit(formData)">
 
-    <input type="text" placeholder="Emaill address" (ngModel)="email" name="email" class="txt" required />
-    <input type="text" placeholder="Password" (ngModel)="password" name="password" class="txt" required />
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE8D3;</i>
+      </span>
+      <input class="input-group-field" type="text" placeholder="Email address" (ngModel)="email" name="email" required>
+    </div>
 
-    <button type="submit" [disabled]="!formData.valid" class="basic-btn button">Create my account</button>
+
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE897;</i>
+      </span>
+      <input class="input-group-field" type="password" placeholder="Password" (ngModel)="Password" name="Password" required>
+    </div>
+
+
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE0CD;</i>
+      </span>
+      <input class="input-group-field" type="text" placeholder="Phone" (ngModel)="phone" name="phone" required>
+    </div>
+
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE88A;</i>
+      </span>
+      <input class="input-group-field" type="text" placeholder="Address" (ngModel)="address" name="address" required>
+    </div>
+
+
+    <button type="submit" [disabled]="!formData.valid" class="basic-btn button" style="margin-top: 1rem;">Create my account</button>
 
   </form>
 

@@ -7,8 +7,21 @@
 
   <form #formData="ngForm">
 
-    <input type="text" placeholder="Email address" (ngModel)="email" name="email" class="txt" required />
-    <input type="text" placeholder="Password" (ngModel)="password" name="password" class="txt" required />
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE8D3;</i>
+      </span>
+      <input class="input-group-field" type="text" placeholder="Email address" (ngModel)="email" name="email" required>
+    </div>
+
+
+    <div class="input-group">
+      <span class="input-group-label" style="padding: 0 .425rem;color:dimgray;">
+        <i class="material-icons">&#xE897;</i>
+      </span>
+      <input class="input-group-field" type="password" placeholder="Password" (ngModel)="Password" name="Password" required>
+    </div>
+
 
     <button type="submit" (click)="onSubmit(formData)" [disabled]="!formData.valid" class="basic-btn button">Log in</button>
 
