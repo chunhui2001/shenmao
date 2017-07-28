@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-// import { moveIn } from '../../router.animations.ts';
+import {fallIn, moveIn} from '../../routers/router.animations';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
+  animations: [ moveIn(), fallIn() ],
+  host: { '[@moveIn]': '' }
 })
 export class SignupComponent implements OnInit {
 

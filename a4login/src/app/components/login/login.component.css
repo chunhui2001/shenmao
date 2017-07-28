@@ -1,41 +1,49 @@
-#lock {
+
+.login-component {
+  max-width: 370px;
+  margin: auto;
+  background: ghostwhite;
+  padding: 1.725em;
+}
+
+.login-component button {
+  width: 100%;
+  padding: 1.125em;
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1.125rem;
+}
+
+.login-component button:focus {
+  color:red;
+}
+
+.login-component #lock {
   width: 40%;
-  margin: 1.5em auto 4em auto;
   display: block;
 }
 
-#fb {
-  /*background: #3B5998 url('asserts/images/facebook.svg') no-repeat 14px 6px;*/
-  background-size: 47px;
-  color:#fff;
+.login-component #fb {
+  background: #3B5998 url(/assets/images/facebook.svg) no-repeat 100% 100%;
+  color: #fff;
+  background-position-x: 12px;
+  background-position-y: center;
+  background-size: auto 60%;
 }
 
-#google {
+.login-component #google {
   border: 1px solid #95989A;
-  /*background: #fff url('asserts/images/google.svg') no-repeat 25px;*/
-  background-size: 47px;
+  background: #fff url(/assets/images/google.svg) no-repeat;
+  background-size: 30px;
+  color: dimgray;
+  background-position-x: 14px;
+  background-position-y: center;
 }
 
-#email {
-  /*background: #ECECEC url('asserts/images/email.svg') no-repeat 25px;*/
-  background-size: 25px;
-}
-
-@media (max-width: 600px) {
-  #page {
-    padding: 1em;
-  }
-  #toolbar {
-    width: 90%;
-    margin-left: -45%;
-  }
-  #fb{
-    background: #3B5998;
-  }
-  #google {
-    background: #fff;
-  }
-  #email {
-    background: #ECECEC;
-  }
+.login-component #email {
+  background: #ECECEC url('/assets/images/gmail.svg') no-repeat;
+  background-size: 30px;
+  background-position-x: 14px;
+  background-position-y: center;
+  color:dimgray;
 }
