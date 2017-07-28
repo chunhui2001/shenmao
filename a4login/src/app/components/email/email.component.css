@@ -1,0 +1,9 @@
+.email-component {
+  background: ghostwhite;
+  padding: 1.725em;
+}
+
+.email-component .button {
+  width: 100%;
+  font-weight: bold;
+}

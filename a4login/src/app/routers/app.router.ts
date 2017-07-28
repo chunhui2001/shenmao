@@ -15,7 +15,7 @@ export const router: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'login-email', component: EmailComponent },
-  { path: 'members', component: MembersComponent, canActivate: [ AuthGurad ] }
+  { path: 'members', component: MembersComponent }
 ]
 
 export const routers: ModuleWithProviders = RouterModule.forRoot(router);

@@ -1,18 +1,18 @@
-<div class="form-container">
+<div class="form-container email-component">
   <a routerLink="/login" id="goback">Go back</a>
 
-  <h2>User Login</h2>
+  <h5>用户登录</h5>
 
   <span class="error" *ngIf="error" [@fallIn]="state">{{ error }}</span>
 
-  <form #formData="ngForm" (onSubmit)="onSubmit(formData)">
+  <form #formData="ngForm">
 
     <input type="text" placeholder="Email address" (ngModel)="email" name="email" class="txt" required />
     <input type="text" placeholder="Password" (ngModel)="password" name="password" class="txt" required />
 
-    <button type="submit" [disabled]="!formData.valid" class="basic-btn">Log in</button>
+    <button type="submit" (click)="onSubmit(formData)" [disabled]="!formData.valid" class="basic-btn button">Log in</button>
 
-    <a routerLink="/signup" class="alc">Don's have an account</a>
+    <a routerLink="/signup"  class="alc">Don's have an account</a>
 
   </form>
 

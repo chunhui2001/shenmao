@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
   }
 
   loginWithEmail() {
-    console.log('loginWithEmail clicked');
+    this.router.navigateByUrl('/login-email');
   }
 
   ngOnInit() {

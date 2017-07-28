@@ -1,15 +1,11 @@
 
 .login-component {
-  max-width: 370px;
-  margin: auto;
   background: ghostwhite;
   padding: 1.725em;
 }
 
 .login-component button {
   width: 100%;
-  padding: 1.125em;
-  font-size: 1.2em;
   font-weight: bold;
   margin-bottom: 1.125rem;
 }
