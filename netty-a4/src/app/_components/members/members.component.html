@@ -1,0 +1,11 @@
+<div *ngIf="!userId">
+  <div *ngFor="let user of (userList ? userList : []); let i=index">
+    <a href="/members?id={{user.userId}}">{{ user.userName }}</a>
+  </div>
+</div>
+<div *ngIf="userId && user">
+  <p>{{user.userId}}</p>
+  <p>{{user.userName}}</p>
+  <p>{{user.photo}}</p>
+  <p>{{user.createdAt}}</p>
+</div>

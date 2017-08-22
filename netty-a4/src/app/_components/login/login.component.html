@@ -1,0 +1,18 @@
+<div class="form-container login-component">
+
+  <h5 style="text-align: center;">用户登录</h5>
+
+  <span class="error" *ngIf="error">{{ error }}</span>
+
+  <button (click)="loginWithFacebook()" id="fb" class="button btn-big">Login With Facebook</button>
+  <button (click)="loginWithGoogle()" id="google" class="button btn-big">Login With Google</button>
+  <button (click)="loginWithEmail()" id="email" class="button btn-big">Login With Email</button>
+
+
+  <p style="margin-top: .5rem;">
+    Not a member yet?
+    <a href="/registry" routerLinkActive="active" class="alc">
+      <strong>Create one here</strong>
+    </a>
+  </p>
+</div>
