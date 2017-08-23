@@ -1,0 +1,16 @@
+
+img {
+  max-width: none;
+}
+
+.example-card {
+  width: 400px;
+}
+
+.example-header-image {
+  background-size: cover;
+}
+
+.mat-card:not([class*=mat-elevation-z]) {
+  margin-top: .3rem;
+}

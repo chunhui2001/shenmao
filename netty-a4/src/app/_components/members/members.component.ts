@@ -3,6 +3,10 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/do';
 
+declare var jquery: any;
+declare var $: any;
+
+import { DateFormatPipe } from '../../_pipelines/dateformat.pipe';
 import { UserService } from '../../_services/user.service';
 
 import { ActivatedRoute } from '@angular/router';
@@ -18,7 +22,11 @@ export class MembersComponent implements OnInit {
   user: any;
   userList: any;
 
-  constructor(private route: ActivatedRoute, private userService: UserService) { }
+  dateFormatPipeFilter: any;
+
+  constructor(private route: ActivatedRoute, private userService: UserService) {
+    this.dateFormatPipeFilter = new DateFormatPipe();
+  }
 
   ngOnInit() {
 
@@ -29,6 +37,7 @@ export class MembersComponent implements OnInit {
     if (this.userId) {
       this.userService.find(this.userId).subscribe(data => {
         this.user = data;
+        this.user.createdAt = this.dateFormatPipeFilter.transform(this.user.createdAt, 'f1');
       });
       return;
     }
@@ -45,6 +54,10 @@ export class MembersComponent implements OnInit {
       this.userList = data;
 
     });
+  }
+
+  alert(_event) {
+    alert($(_event.target).html());
   }
 
 }

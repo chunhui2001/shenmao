@@ -1,7 +1,26 @@
 <div *ngIf="!userId">
-  <div *ngFor="let user of (userList ? userList : []); let i=index">
-    <a href="/members?id={{user.userId}}">{{ user.userName }}</a>
-  </div>
+
+  <md-card *ngFor="let user of (userList ? userList : []); let i=index" class="example-card">
+    <md-card-header>
+      <div md-card-avatar class="example-header-image"
+           [ngStyle]="{ 'background-image' : 'url(\'' + user.photo + '\')' }"></div>
+      <md-card-title><a href="/members?id={{user.userId}}">{{ user.userName }}</a></md-card-title>
+      <md-card-subtitle (click)="alert($event);">{{ user.showName }}</md-card-subtitle>
+    </md-card-header>
+    <img md-card-image src="{{user.photo}}">
+    <md-card-content>
+      <p>
+        The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+        <br />
+        <span style="color:firebrick;">创建于: {{ user.createdAt | date: 'f1' }}</span>
+      </p>
+    </md-card-content>
+    <md-card-actions>
+      <button md-button>LIKE</button>
+      <button md-button>SHARE</button>
+    </md-card-actions>
+  </md-card>
+
 </div>
 <div *ngIf="userId && user">
   <p>{{user.userId}}</p>
@@ -9,3 +28,4 @@
   <p>{{user.photo}}</p>
   <p>{{user.createdAt}}</p>
 </div>
+

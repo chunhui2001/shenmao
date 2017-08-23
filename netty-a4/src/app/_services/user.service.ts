@@ -15,6 +15,7 @@ interface RestResponse {
 interface UserEntity {
   userId: string,
   userName: string,
+  showName: String,
   userRoles: any,
   photo: string;
   createdAt: Date;
