@@ -1,24 +1,33 @@
 <div *ngIf="!userId">
 
+
   <md-card *ngFor="let user of (userList ? userList : []); let i=index" class="example-card">
     <md-card-header>
       <div md-card-avatar class="example-header-image"
            [ngStyle]="{ 'background-image' : 'url(\'' + user.photo + '\')' }"></div>
-      <md-card-title><a href="/members?id={{user.userId}}">{{ user.userName }}</a></md-card-title>
-      <md-card-subtitle (click)="alert($event);">{{ user.showName }}</md-card-subtitle>
+      <md-card-title style="margin-bottom: 12px;"><a href="/members?id={{user.userId}}">{{ user.userName }}</a></md-card-title>
+      <md-card-subtitle style="margin-bottom: 12px;" (click)="alert($event);">
+        <span appUserInfoCard="'hotpink'"
+              appShadowX="'12px'"
+              appShadowY="'6px'"
+              appShadowBlur="'30px'">{{ user.showName }}</span>
+        </md-card-subtitle>
     </md-card-header>
-    <img md-card-image src="{{user.photo}}">
-    <md-card-content>
+    <img md-card-image style="margin-top: 0;" src="{{user.photo}}">
+    <md-card-content style="margin-bottom: 0;">
       <p>
         The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
         <br />
         <span style="color:firebrick;">创建于: {{ user.createdAt | date: 'f1' }}</span>
       </p>
     </md-card-content>
-    <md-card-actions>
-      <button md-button>LIKE</button>
-      <button md-button>SHARE</button>
-    </md-card-actions>
+    <!--<md-card-actions>-->
+      <!--<button md-button>LIKE</button>-->
+      <!--<button md-button>SHARE</button>-->
+    <!--</md-card-actions>-->
+
+
+
   </md-card>
 
 </div>

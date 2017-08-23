@@ -4,25 +4,8 @@ import { Observable } from 'rxjs/Rx';
 
 import 'rxjs/add/operator/map';
 
-
-interface RestResponse {
-  error: boolean,
-  code: string,
-  message: any,
-  data: any
-}
-
-interface UserEntity {
-  userId: string,
-  userName: string,
-  showName: String,
-  userRoles: any,
-  photo: string;
-  createdAt: Date;
-  gender: string;
-  lastUpdated: Date;
-  lastLogin: Date;
-}
+import { UserEntity } from '../_entities/user.entity';
+import { RestResponse } from '../_entities/rest.response.entity';
 
 @Injectable()
 export class UserService {

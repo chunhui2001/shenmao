@@ -5,6 +5,7 @@ img {
 
 .example-card {
   width: 400px;
+  margin: auto;
 }
 
 .example-header-image {

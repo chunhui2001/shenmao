@@ -5,18 +5,15 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/operator/map';
 
 
-interface RestResponse {
-  error: boolean,
-  code: string,
-  message: any,
-  data: any
-}
 
+import { UserEntity } from '../_entities/user.entity';
+import { RestResponse } from '../_entities/rest.response.entity';
 
 @Injectable()
 export class AuthenticationService {
 
   public token: string;
+  public user: UserEntity;
 
   constructor(private http: HttpClient) {
 
@@ -31,9 +28,19 @@ export class AuthenticationService {
             return response.message[0];
           }
 
+          this.user = response.data;
+
+          // save user info to localStorage
+          localStorage.setItem('user', JSON.stringify(this.user));
           return null;
       });
 
+  }
+
+  loginUser(): UserEntity {
+    // get user info from localStorage
+    this.user = JSON.parse(localStorage.getItem('user'));
+    return this.user;
   }
 
   logout(): void {
