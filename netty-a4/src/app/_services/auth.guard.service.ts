@@ -6,7 +6,7 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
-import { AuthenticationService } from '../_services/authentication.service';
+import { AuthenticationService } from '../_services/_index';
 
 @Injectable()
 export class AuthGuard implements  CanActivate {

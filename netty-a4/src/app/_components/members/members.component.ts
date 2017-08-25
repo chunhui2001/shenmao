@@ -6,8 +6,8 @@ import 'rxjs/add/operator/do';
 declare var jquery: any;
 declare var $: any;
 
-import { DateFormatPipe } from '../../_pipelines/dateformat.pipe';
-import { UserService } from '../../_services/user.service';
+import { DateFormatPipe } from '../../_pipelines/_index';
+import { UserService } from '../../_services/_index';
 
 import { ActivatedRoute } from '@angular/router';
 

@@ -6,8 +6,7 @@ import 'rxjs/add/operator/map';
 
 
 
-import { UserEntity } from '../_entities/user.entity';
-import { RestResponse } from '../_entities/rest.response.entity';
+import { UserEntity, RestResponse } from '../_entities/_index';
 
 @Injectable()
 export class AuthenticationService {

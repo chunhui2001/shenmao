@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { moveIn, fallIn } from '../../routers/router.animations';
 
-import { AuthenticationService } from '../../_services/authentication.service';
+import { AuthenticationService } from '../../_services/_index';
 
 @Component({
   selector: 'app-email',
