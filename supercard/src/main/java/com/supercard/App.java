@@ -1,0 +1,154 @@
+package com.supercard;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.supercard.cardparse.ParseCiticEmail;
+import com.supercard.cardparse.ParseCmbEmail;
+import com.supercard.cardparse.ParsePCCCEmail;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.mail.util.MimeMessageParser;
+import org.jsoup.nodes.Document;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Collection;
+import java.util.Properties;
+
+import javax.mail.*;
+import javax.mail.internet.MimeMessage;
+import javax.mail.search.*;
+
+/**
+ * Hello world!
+ *
+ */
+public class App 
+{
+
+    public static String readFile(String filePath)  {
+
+        try (FileInputStream inputStream = new FileInputStream(filePath)) {
+            return IOUtils.toString(inputStream, "utf-8");
+        } catch (IOException e) {
+            return null;
+        }
+
+    }
+
+    public static void main( String[] args ) throws Exception {
+
+
+        String host = "pop.qq.com";
+        String email = "76920104@qq.com";
+        String password = "ujwljrfbjdydbigc";
+
+        if (1==1) {
+
+//            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+//            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
+//            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+
+//
+//            ParseCmbEmail parsePmbEmail = new ParseCmbEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+//            Collection<BillEntity> billEntityList = parsePmbEmail.parse();
+//            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+
+
+            ParseCiticEmail parseCiticEmail = new ParseCiticEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+            Collection<BillEntity> billEntityList = parseCiticEmail.parse();
+            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+
+            return;
+        }
+
+
+        Properties props = new Properties();
+
+        Properties p = new Properties();
+        p.setProperty("mail.pop3.host", "pop.qq.com"); // 按需要更改
+        p.setProperty("mail.pop3.port", "995");
+
+        // SSL安全连接参数
+        p.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        p.setProperty("mail.pop3.socketFactory.fallback", "true");
+        p.setProperty("mail.pop3.socketFactory.port", "995");
+
+        Session session = Session.getDefaultInstance(p, null);
+        Store store = session.getStore("pop3");
+        store.connect(host, email, password);
+
+        Folder folder = store.getFolder("INBOX");
+        folder.open(Folder.READ_ONLY);
+//
+//  Message message[] = folder.getMessages();
+        Message message[] = folder.search(new AndTerm(
+                new OrTerm(
+                    new FromStringTerm[]{
+//                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
+                        new FromStringTerm("中信银行"),
+//                        new FromStringTerm("交通银行"),
+//                        new FromStringTerm("招商银行")
+                }),
+                new OrTerm(
+                    new SubjectTerm[]{
+                        new SubjectTerm("账单")
+                })));
+
+        System.out.println("邮件数量:　" + message.length);
+
+        MimeMessageParser parser = null;
+
+        for (int i = 0; i < message.length; i++) {
+
+            MimeMessage mimeMessage = (MimeMessage) message[i];
+            parser = new MimeMessageParser(mimeMessage).parse();
+
+            String from = parser.getFrom();
+
+            Collection<BillEntity> billEntityList = null;
+
+            try {
+
+                switch (from) {
+                    case "PCCC@bocomcc.com":
+                        System.out.println(from + " [交通 FOCUS][" + (i + 1) + "]");
+                        billEntityList = new ParsePCCCEmail(email, mimeMessage, parser).parse();
+                        break;
+                    case "citiccard@citiccard.com":
+                        System.out.println(from + " [中信 FOCUS][" + (i + 1) + "]");
+                        ParseCiticEmail parseCiticEmail = new ParseCiticEmail(email, mimeMessage, parser);
+                        billEntityList = parseCiticEmail.parse();
+                        System.out.println(parseCiticEmail.getReceivDate() + " parseCiticEmail.getReceivDate()");
+                        break;
+                    case "creditcard@cgbchina.com.cn":
+                        System.out.println(from + " [广发 FOCUS][" + (i + 1) + "]");
+                        break;
+                    case "ccsvc@message.cmbchina.com":
+                        System.out.println(from + " [招商 FOCUS][" + (i + 1) + "]");
+                        billEntityList = new ParseCmbEmail(email, mimeMessage, parser).parse();
+                        break;
+                    default:
+                        System.out.println(from + " [IGNORE][" + (i + 1) + "]");
+                        continue;
+
+                }
+
+            } catch (Exception e) {
+                System.out.print(parser.getHtmlContent());
+                System.out.print(from + "ERROR");
+            }
+
+
+            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+
+
+        }
+
+        folder.close(true);
+        store.close();
+
+    }
+}
