@@ -45,7 +45,7 @@ public class App
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        if (1==1) {
+        if (1==1 && 1==2) {
 
 //            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
 //            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
