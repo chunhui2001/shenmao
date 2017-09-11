@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supercard.cardparse.ParseCiticEmail;
 import com.supercard.cardparse.ParseCmbEmail;
 import com.supercard.cardparse.ParsePCCCEmail;
+import com.supercard.cardparse.ParseSpdbEmail;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.jsoup.nodes.Document;
@@ -45,7 +46,7 @@ public class App
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        if (1==1 && false) {
+        if (1==1) {
 
 //            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
 //            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
@@ -56,41 +57,44 @@ public class App
 //            Collection<BillEntity> billEntityList = parsePmbEmail.parse();
 //            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
 
+//            ParseCiticEmail parseCiticEmail = new ParseCiticEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+//            Collection<BillEntity> billEntityList = parseCiticEmail.parse();
+//            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
 
-            ParseCiticEmail parseCiticEmail = new ParseCiticEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
-            Collection<BillEntity> billEntityList = parseCiticEmail.parse();
+
+            ParseSpdbEmail parseSpdbEmail = new ParseSpdbEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+            Collection<BillEntity> billEntityList = parseSpdbEmail.parse();
             System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
 
             return;
         }
 
-
-        Properties props = new Properties();
-
-        Properties p = new Properties();
-        p.setProperty("mail.pop3.host", "pop.qq.com"); // 按需要更改
-        p.setProperty("mail.pop3.port", "995");
+        Properties props = new Properties() {{
+            setProperty("mail.pop3.host", "pop.qq.com");
+            setProperty("mail.pop3.port", "995");
+        }};
 
         // SSL安全连接参数
-        p.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        p.setProperty("mail.pop3.socketFactory.fallback", "true");
-        p.setProperty("mail.pop3.socketFactory.port", "995");
+        props.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        props.setProperty("mail.pop3.socketFactory.fallback", "true");
+        props.setProperty("mail.pop3.socketFactory.port", "995");
 
-        Session session = Session.getDefaultInstance(p, null);
+        Session session = Session.getDefaultInstance(props, null);
         Store store = session.getStore("pop3");
         store.connect(host, email, password);
 
         Folder folder = store.getFolder("INBOX");
         folder.open(Folder.READ_ONLY);
-//
-//  Message message[] = folder.getMessages();
+
+        // Message message[] = folder.getMessages();
         Message message[] = folder.search(new AndTerm(
                 new OrTerm(
                     new FromStringTerm[]{
 //                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
-                        new FromStringTerm("中信银行"),
+//                        new FromStringTerm("中信银行"),
 //                        new FromStringTerm("交通银行"),
-//                        new FromStringTerm("招商银行")
+//                        new FromStringTerm("招商银行"),
+                        new FromStringTerm("浦发银行")  // 邮件内是一个链接地址
                 }),
                 new OrTerm(
                     new SubjectTerm[]{
@@ -119,9 +123,11 @@ public class App
                         break;
                     case "citiccard@citiccard.com":
                         System.out.println(from + " [中信 FOCUS][" + (i + 1) + "]");
-                        ParseCiticEmail parseCiticEmail = new ParseCiticEmail(email, mimeMessage, parser);
-                        billEntityList = parseCiticEmail.parse();
-                        System.out.println(parseCiticEmail.getReceivDate() + " parseCiticEmail.getReceivDate()");
+                        billEntityList = new ParseCiticEmail(email, mimeMessage, parser).parse();
+                        break;
+                    case "estmtservice@eb.spdbccc.com.cn":
+                        System.out.println(from + " [浦发 FOCUS][" + (i + 1) + "]");
+                        billEntityList = new ParseSpdbEmail(email, mimeMessage, parser).parse();
                         break;
                     case "creditcard@cgbchina.com.cn":
                         System.out.println(from + " [广发 FOCUS][" + (i + 1) + "]");

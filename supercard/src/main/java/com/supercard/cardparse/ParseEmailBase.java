@@ -2,11 +2,18 @@ package com.supercard.cardparse;
 
 import com.supercard.BillEntity;
 import org.apache.commons.mail.util.MimeMessageParser;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -126,6 +133,34 @@ public abstract class ParseEmailBase {
     abstract public Collection<BillEntity> parse();
 
     protected String escapeContent(String content) {
-        return Pattern.compile("(&nbsp;)+").matcher(content).replaceAll(" ");
+        return Pattern.compile("(&nbsp;|\\s)+").matcher(content).replaceAll(" ");
     }
+
+    protected static String doPost(String url, String cookie, Object params) {
+
+        String result = null;
+        HttpPost homeDataActionPost = new HttpPost(url);
+
+        if (cookie != null) homeDataActionPost.setHeader("Cookie", cookie);
+
+        try {
+
+            CloseableHttpResponse homeDataActionPostResult = HttpClients.createDefault().execute(homeDataActionPost);
+
+            HttpEntity homeDataActionPostEntity = homeDataActionPostResult.getEntity();
+            result = EntityUtils.toString(homeDataActionPostEntity);
+
+            EntityUtils.consume(homeDataActionPostEntity);
+            homeDataActionPostResult.close();
+
+        } catch (IOException e) {
+            return null;
+        } finally {
+
+        }
+
+        return result;
+
+    }
+
 }
