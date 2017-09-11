@@ -1,12 +1,14 @@
 package com.supercard.cardparse;
 
 import com.supercard.BillEntity;
+import com.supercard.entities.BillItem;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,24 +41,6 @@ public class ParseCiticEmail extends ParseEmailBase {
         Pattern billBoundPattern = Pattern.compile("([\\d]{4}年[\\d]{2}月)账单已产生([\\W\\w]+?)记录了您([\\d]{4}年[\\d]{2}月[\\d]{2}日)-([\\d]{4}年[\\d]{2}月[\\d]{2}日)账户变动信息");
         Pattern billExpiredPattern = Pattern.compile("到期还款日：([\\d]{4}年[\\d]{2}月[\\d]{2}日)");
 
-        Elements elements = this.emailHtmlDoc.select("span#fixBand5");
-
-        Elements elements2 = this.emailHtmlDoc.select("span#fixBand7>table");
-
-
-
-        for (int i =0 ; i<elements.size(); i++) {
-            System.out.println(elements.get(i).html());
-        }
-
-
-
-        for (int i =0 ; i<elements2.size(); i++) {
-            if(elements2.get(i).select("#fixBand53").size() > 0) continue;
-            System.out.println(elements2.get(i).html());
-        }
-
-
         Matcher userNameMatcher = userNamePattern.matcher(this.content);
         Matcher billBoundMatcher = billBoundPattern.matcher(this.content);
         Matcher billExpiredMatcher = billExpiredPattern.matcher(this.content);
@@ -76,7 +60,50 @@ public class ParseCiticEmail extends ParseEmailBase {
             bill.setBillExpired(billExpiredMatcher.group(1).replaceAll("年|月", "/").replace("日", ""));
         }
 
-        return null;
+        Elements billTdelements = this.emailHtmlDoc.select("span#fixBand33 span#fixBand3 span#loopBand2 span#fixBand5 div font");
+
+        bill.setCardNumber(billTdelements.get(0).html());
+        bill.setBillMoney(billTdelements.get(5).html());
+        bill.setBillMoneyMin(billTdelements.get(6).html());
+
+        // parse billItems
+        bill.setBillItems(parseBillItems(bill));
+        bill.setUserEmail(useremail);
+
+
+
+        return new ArrayList<BillEntity>() {{ add(bill); }};
+    }
+
+    private Collection<BillItem> parseBillItems(BillEntity bill) {
+
+        Elements billItemsElement = this.emailHtmlDoc.select("span#fixBand7>table");
+        Elements tdElements = null;
+
+        Collection<BillItem> billItems = new ArrayList<>();
+        BillItem billItem = null;
+
+        for (int i = 0; i < billItemsElement.size(); i++) {
+
+            if (billItemsElement.get(i).select("#fixBand53").size() > 0) continue;
+
+            billItem = new BillItem();
+            tdElements = billItemsElement.get(i).select("div font");
+
+            billItem.setBillDate(tdElements.get(0).html());
+            billItem.setRecordDate(tdElements.get(1).html());
+            billItem.setCardNumber(tdElements.get(2).html());
+            billItem.setDesc(escapeContent(tdElements.get(3).html()));
+            billItem.setCurrency(tdElements.get(6).html());
+            billItem.setMoney(tdElements.get(7).html());
+            billItem.setType("consumption");
+
+            billItems.add(billItem);
+
+        }
+
+        return billItems;
+
     }
 
 }

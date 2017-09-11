@@ -9,6 +9,7 @@ import org.jsoup.select.Elements;
 import javax.mail.internet.MimeMessage;
 import java.util.Collection;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 /**
  * Created by keesh on 10/09/2017.
@@ -47,8 +48,6 @@ public abstract class ParseEmailBase {
 //        this.receivDate = message.getReceivedDate();
 
         this.receivDate = message.getSentDate();
-
-
 
     }
 
@@ -125,4 +124,8 @@ public abstract class ParseEmailBase {
     }
 
     abstract public Collection<BillEntity> parse();
+
+    protected String escapeContent(String content) {
+        return Pattern.compile("(&nbsp;)+").matcher(content).replaceAll(" ");
+    }
 }

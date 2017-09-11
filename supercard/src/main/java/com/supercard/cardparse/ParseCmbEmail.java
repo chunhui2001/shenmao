@@ -77,7 +77,7 @@ public class ParseCmbEmail extends ParseEmailBase {
                 billItem.setRecordDate(bill.getBillMonth().substring(0,4) + "/" + billItem.getRecordDate().substring(0, 2) + "/" + billItem.getRecordDate().substring(2,4));
 
             if (billItem.getDesc() != null) {
-                billItem.setDesc(billItem.getDesc().replaceAll("&nbsp;", " "));
+                billItem.setDesc(escapeContent(billItem.getDesc()));
             }
 
             billItem.setMoney(billItem.getMoney().split("&nbsp;")[1]);
