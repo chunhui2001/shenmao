@@ -47,6 +47,7 @@ netty
 a4login
 firebase
 repo
+netty-a4
 
 dependency-reduced-pom.xml
 supercard.iml
