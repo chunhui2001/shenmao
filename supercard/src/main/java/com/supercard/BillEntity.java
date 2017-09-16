@@ -4,6 +4,7 @@ import com.supercard.entities.BillItem;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by keesh on 09/09/2017.
@@ -20,6 +21,16 @@ public class BillEntity {
     private String billMoney;
     private String billMoneyMin;
     private String gender;
+
+    public Date getReceivDate() {
+        return receivDate;
+    }
+
+    public void setReceivDate(Date receivDate) {
+        this.receivDate = receivDate;
+    }
+
+    protected Date receivDate = null;
 
     private Collection<BillItem> billItems;
 

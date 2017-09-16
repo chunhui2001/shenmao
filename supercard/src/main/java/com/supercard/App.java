@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Properties;
 
@@ -91,10 +92,10 @@ public class App
                 new OrTerm(
                     new FromStringTerm[]{
 //                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
-                        new FromStringTerm("中信银行"),
-                        new FromStringTerm("交通银行"),
-//                        new FromStringTerm("招商银行"),
-                        new FromStringTerm("浦发银行")  // 邮件内是一个链接地址
+//                        new FromStringTerm("中信银行"),
+//                        new FromStringTerm("交通银行"),
+                        new FromStringTerm("招商银行"),
+//                        new FromStringTerm("浦发银行")  // 邮件内是一个链接地址
                 }),
                 new OrTerm(
                     new SubjectTerm[]{
@@ -143,9 +144,11 @@ public class App
                 }
 
             } catch (Exception e) {
-                System.out.print(parser.getHtmlContent());
+                    System.out.print(parser.getHtmlContent());
                 System.out.print(from + "ERROR");
             }
+
+//            billEntityList.stream().forEach(b -> System.out.println(b.getReceivDate()));
 
 
             System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
@@ -156,7 +159,7 @@ public class App
         folder.close(true);
         store.close();
 
-        System.out.println("Parse email eills completed!");
+        System.out.println("Parse email bills completed!");
 
     }
 }

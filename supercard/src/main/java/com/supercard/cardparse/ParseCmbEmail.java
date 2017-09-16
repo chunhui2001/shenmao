@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -89,10 +90,50 @@ public class ParseCmbEmail extends ParseEmailBase {
 
     }
 
+    public BillEntity parseNormalBill() {
+
+        Element billExpiredElement = emailHtmlDoc.select("span#fixBand18") != null && emailHtmlDoc.select("span#fixBand18").size() > 0 ? emailHtmlDoc.select("span#fixBand18").first() : null;
+        Element billMoneyElement = emailHtmlDoc.select("span#fixBand57") != null && emailHtmlDoc.select("span#fixBand57").size() > 0 ? emailHtmlDoc.select("span#fixBand57").first() : null;
+        Element billMoneyMinElement = emailHtmlDoc.select("span#fixBand46") != null && emailHtmlDoc.select("span#fixBand46").size() > 0 ? emailHtmlDoc.select("span#fixBand46").first() : null;
+
+        if (!(billExpiredElement != null && billMoneyElement != null && billMoneyMinElement != null)) return null;
+
+        BillEntity bill = new BillEntity();
+
+        Pattern billExpiredPattern = Pattern.compile("([\\d]{2}/[\\d]{2})");
+        Pattern moneyRbmPattern = Pattern.compile("(￥[\\d\\.]+)");
+        Pattern billMonthPattern = Pattern.compile("billMonth=([\\d]{6})");
+
+        Matcher billExpiredMatcher = billExpiredPattern.matcher(billExpiredElement.html());
+        Matcher billMoneyMatcher = moneyRbmPattern.matcher(billMoneyElement.html());
+        Matcher billMoneyMinMatcher = moneyRbmPattern.matcher(billMoneyMinElement.html());
+        Matcher billMonthMatcher = billMonthPattern.matcher(this.content);
+
+        if (billMonthMatcher.find()) bill.setBillMonth(billMonthMatcher.group(1));
+        if (billExpiredMatcher.find()) bill.setBillExpired(billExpiredMatcher.group(1));
+        if (billMoneyMatcher.find()) bill.setBillMoney(billMoneyMatcher.group(1));
+        if (billMoneyMinMatcher.find()) bill.setBillMoneyMin(billMoneyMinMatcher.group(1));
+
+        bill.setReceivDate(this.getReceivDate());
+        bill.setUserIdentity(this.getUseremail());
+
+        return bill;
+
+    }
+
     @Override
     public Collection<BillEntity> parse() {
 
-        BillEntity bill = new BillEntity();
+
+        Collection<BillEntity> billList = new ArrayList<>();
+        BillEntity bill = parseNormalBill();
+
+        if (bill != null) {
+            billList.add(bill);
+            return billList;
+        }
+
+        bill = new BillEntity();
 
         Element billMonthBoundElement = emailHtmlDoc.select("span#fixBand6").first();
         Element billMontyElement = emailHtmlDoc.select("span#fixBand7").first();
@@ -142,9 +183,11 @@ public class ParseCmbEmail extends ParseEmailBase {
 
         bill.setBillItems(parseBillItems(bill));
         bill.setUserIdentity(useremail);
+        bill.setReceivDate(this.getReceivDate());
 
+        billList.add(bill);
 
-        return new ArrayList<BillEntity>() {{ add(bill); }};
+        return billList;
 
     }
 }
