@@ -3,7 +3,6 @@ package com.supercard.cardparse;
 import com.supercard.BillEntity;
 import com.supercard.entities.BillItem;
 import org.apache.commons.mail.util.MimeMessageParser;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
@@ -48,39 +47,39 @@ public class ParseCmbEmail extends ParseEmailBase {
 
             billItem = new BillItem();
 
-            billItem.setBillDate(billItemsTdsElement.get(0).html());
+            billItem.setTransDate(billItemsTdsElement.get(0).html());
             billItem.setRecordDate(billItemsTdsElement.get(1).html());
-            billItem.setDesc(billItemsTdsElement.get(2).html());
-            billItem.setMoney(billItemsTdsElement.get(3).html());
-            billItem.setCardNumber(billItemsTdsElement.get(4).html());
+            billItem.setTransDesc(billItemsTdsElement.get(2).html());
+            billItem.setTransMoney(billItemsTdsElement.get(3).html());
+            billItem.setTransCardNumber(billItemsTdsElement.get(4).html());
             billItem.setTransArea(billItemsTdsElement.get(5).html());
-//            billItem.setMoney(billItemsTdsElement.get(3).html());
+//            billItem.setTransMoney(billItemsTdsElement.get(3).html());
 
-            billItem.setCurrency(billItem.getMoney().split("&nbsp;")[0].replace("-", ""));
+            billItem.setTransCurrency(billItem.getTransMoney().split("&nbsp;")[0].replace("-", ""));
 
             if (billItem.getTransArea().equals("&nbsp;")) {
                 billItem.setTransArea(null);
             }
 
 
-            if (billItem.getBillDate().equals("&nbsp;")) {
-                billItem.setType("repayment");
-                billItem.setBillDate(null);
+            if (billItem.getTransDate().equals("&nbsp;")) {
+                billItem.setTransType("repayment");
+                billItem.setTransDate(null);
             } else {
-                billItem.setType("consumption");
+                billItem.setTransType("consumption");
             }
 
-            if (billItem.getBillDate() != null)
-                billItem.setBillDate(bill.getBillMonth().substring(0,4) + "/" + billItem.getBillDate().substring(0, 2) + "/" + billItem.getBillDate().substring(2,4));
+            if (billItem.getTransDate() != null)
+                billItem.setTransDate(bill.getBillMonth().substring(0,4) + "/" + billItem.getTransDate().substring(0, 2) + "/" + billItem.getTransDate().substring(2,4));
 
             if (billItem.getRecordDate() != null)
                 billItem.setRecordDate(bill.getBillMonth().substring(0,4) + "/" + billItem.getRecordDate().substring(0, 2) + "/" + billItem.getRecordDate().substring(2,4));
 
-            if (billItem.getDesc() != null) {
-                billItem.setDesc(escapeContent(billItem.getDesc()));
+            if (billItem.getTransDesc() != null) {
+                billItem.setTransDesc(escapeContent(billItem.getTransDesc()));
             }
 
-            billItem.setMoney(billItem.getMoney().split("&nbsp;")[1]);
+            billItem.setTransMoney(billItem.getTransMoney().split("&nbsp;")[1]);
 
             billItems.add(billItem);
 
@@ -142,7 +141,7 @@ public class ParseCmbEmail extends ParseEmailBase {
         }
 
         bill.setBillItems(parseBillItems(bill));
-        bill.setUserEmail(useremail);
+        bill.setUserIdentity(useremail);
 
 
         return new ArrayList<BillEntity>() {{ add(bill); }};

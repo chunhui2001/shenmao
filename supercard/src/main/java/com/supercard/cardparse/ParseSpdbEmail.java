@@ -1,25 +1,16 @@
 package com.supercard.cardparse;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supercard.BillEntity;
+import com.supercard.entities.BillItem;
 import org.apache.commons.mail.util.MimeMessageParser;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by keesh on 11/09/2017.
@@ -27,6 +18,8 @@ import java.util.Map;
 public class ParseSpdbEmail extends ParseEmailBase {
 
     private static final String homeDataAction = "https://ebill.spdbccc.com.cn/cloudbank-portal/myBillController/loadHomeData.action";
+
+    private String cookieString = null;
 
     public ParseSpdbEmail() {
 
@@ -42,77 +35,105 @@ public class ParseSpdbEmail extends ParseEmailBase {
         super(userEmail, message, parser);
     }
 
-    @Override
-    public Collection<BillEntity> parse() {
+    public String getBillJson() {
 
         Element element = this.emailHtmlDoc.select("a").first();
         String billUrl = escapeContent(element.attr("href")).replaceAll(" ", "");
 
-        System.out.println(billUrl + " billUrl");
+        this.cookieString = doGet(billUrl, null, null);
 
+        if (this.cookieString == null) return null;
 
+        return doPost(homeDataAction, this.cookieString, null);
 
-        CloseableHttpResponse response1 = null;
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet(billUrl);
-        String cookieString = null;
+    }
+
+    @Override
+    public Collection<BillEntity> parse() {
+
+        String billJsonString = getBillJson();
+
+        Map<String,String> billMap = null;
 
         try {
+            billMap = new ObjectMapper().readValue(billJsonString, new TypeReference<HashMap<String,String>>(){});
+        } catch (IOException e) {
+            return null;
+        }
 
-            response1 = httpclient.execute(httpGet);
-            cookieString = setCookie(response1);
-//            HttpEntity entity1 = response1.getEntity();
-//            EntityUtils.consume(entity1);
-            response1.close();
+        if (billMap == null) return null;
 
+        BillEntity billEntity = new BillEntity();
+
+        billEntity.setUserIdentity(this.useremail);
+        billEntity.setBillMoney(billMap.get("cash"));
+        billEntity.setBillMoneyMin(billMap.get("minPay"));
+        billEntity.setBillExpired(billMap.get("lastBackDate"));
+        billEntity.setBillMonth(billMap.get("billYM"));
+        billEntity.setCustomerName(billMap.get("userName").split(" ")[0]);
+        billEntity.setGender(billMap.get("userName").split(" ")[1]);
+        billEntity.setCardNumber(billMap.get("cardNo"));
+
+
+        billEntity.setBillItems(parseBillItems());
+
+        return new ArrayList<BillEntity>() {{ add(billEntity); }};
+
+    }
+
+    private Collection<BillItem> parseBillItems() {
+
+        String billItemAction = "https://ebill.spdbccc.com.cn/cloudbank-portal/billDetailController/PCloadBillsDetailAll.action";
+
+        String billItemResultString = doPost(billItemAction, this.cookieString, null);
+
+        if (billItemResultString == null) return null;
+
+        Map<String, Object> result = new HashMap<>();
+
+        try {
+            result = new ObjectMapper().readValue(billItemResultString, new TypeReference<HashMap<String,Object>>(){});
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
+        }
+
+        List<LinkedHashMap<String, String>> itemList =  (ArrayList<LinkedHashMap<String, String>>)result.get("list");
+        Collection<BillItem> itemListEntity = new ArrayList<>();
+        BillItem billItemEntity = null;
+
+
+        for (int i =0; i<itemList.size(); i++) {
+
+            billItemEntity = new BillItem();
+
+            // amountFL: D consumption, C repayment
+
+            billItemEntity.setTransMoney(itemList.get(i).get("amount"));
+            billItemEntity.setTransDesc(itemList.get(i).get("desLine1") + " " + itemList.get(i).get("desLine2"));
+            billItemEntity.setTransCurrency("RMB");
+            billItemEntity.setTransCardNumber(itemList.get(i).get("cardNbr1"));
+            billItemEntity.setTransDate(itemList.get(i).get("purDate8"));
+            billItemEntity.setRecordDate(null);
+            billItemEntity.setTransArea(null);
+
+            if (itemList.get(i).get("amountFl").endsWith("D")) {
+                billItemEntity.setTransType("consumption");
+            } else if (itemList.get(i).get("amountFl").endsWith("C")) {
+                billItemEntity.setTransType("repayment");
+            } else {
+                billItemEntity.setTransType(itemList.get(i).get("amountFl"));
+            }
+
+            itemListEntity.add(billItemEntity);
 
         }
 
-        if (cookieString == null) return null;
 
-        System.out.println(doPost(homeDataAction, cookieString, null));
+        return itemListEntity;
 
-
-        return null;
     }
 
 
-    public static Map<String,String> cookieMap = new HashMap<String, String>(64);
 
-    public static String setCookie(HttpResponse httpResponse)
-    {
-
-        Header headers[] = httpResponse.getHeaders("Set-Cookie");
-
-        if (headers == null || headers.length==0) return null;
-
-        String cookie = "";
-
-        for (int i = 0; i < headers.length; i++) {
-            cookie += headers[i].getValue();
-            if(i != headers.length-1) cookie += ";";
-        }
-
-        String cookies[] = cookie.split(";");
-
-        for (String c : cookies)
-        {
-            c = c.trim();
-            if(cookieMap.containsKey(c.split("=")[0])) cookieMap.remove(c.split("=")[0]);
-            cookieMap.put(c.split("=")[0], c.split("=").length == 1 ? "":(c.split("=").length ==2?c.split("=")[1]:c.split("=",2)[1]));
-        }
-
-        String cookiesTmp = "";
-
-        for (String key :cookieMap.keySet())
-        {
-            cookiesTmp +=key+"="+cookieMap.get(key)+";";
-        }
-
-        return cookiesTmp.substring(0,cookiesTmp.length()-2);
-    }
 
 }

@@ -1,19 +1,14 @@
 package com.supercard.cardparse;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.supercard.BillEntity;
 import com.supercard.entities.BillItem;
 import org.apache.commons.mail.util.MimeMessageParser;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,7 +40,7 @@ public class ParsePCCCEmail extends ParseEmailBase {
 
             BillEntity bill = new BillEntity();
 
-            bill.setUserEmail(this.useremail);
+            bill.setUserIdentity(this.useremail);
 
             Element element1 = element.select("#container>div").first();
             Element element2 = element.select("#container #billInfo1>#table1").first();
@@ -79,7 +74,7 @@ public class ParsePCCCEmail extends ParseEmailBase {
         Matcher orderMonthBoundMather = orderMonthBoundPattern.matcher(element1Html);
 
         if (userNameMatcher.find()) {
-            bill.setCustomerName(userNameMatcher.group(1));
+            bill.setCustomerName(userNameMatcher.group(1).trim());
             bill.setGender(userNameMatcher.group(2));
         }
 
@@ -145,19 +140,19 @@ public class ParsePCCCEmail extends ParseEmailBase {
 
             if (tdElement.size() != 5) continue;
 
-            billItem.setCardNumber(cardNumber);
-            billItem.setBillDate(tdElement.get(0).html());
+            billItem.setTransCardNumber(cardNumber);
+            billItem.setTransDate(tdElement.get(0).html());
             billItem.setRecordDate(tdElement.get(1).html());
-            billItem.setDesc(tdElement.get(2).html());
-            billItem.setCurrency(tdElement.get(3).html().split(" ")[0]);
-            billItem.setMoney(tdElement.get(3).html().split(" ")[1]);
+            billItem.setTransDesc(tdElement.get(2).html());
+            billItem.setTransCurrency(tdElement.get(3).html().split(" ")[0]);
+            billItem.setTransMoney(tdElement.get(3).html().split(" ")[1]);
 
-            if (billItem.getDesc() != null && billItem.getDesc().contains("还款")) {
-                billItem.setType("repayment");
+            if (billItem.getTransDesc() != null && billItem.getTransDesc().contains("还款")) {
+                billItem.setTransType("repayment");
             }
 
-            if (billItem.getDesc() != null && billItem.getDesc().contains("消费")) {
-                billItem.setType("consumption");
+            if (billItem.getTransDesc() != null && billItem.getTransDesc().contains("消费")) {
+                billItem.setTransType("consumption");
             }
 
             billItemList.add(billItem);

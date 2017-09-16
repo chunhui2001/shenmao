@@ -46,7 +46,7 @@ public class App
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        if (1==1) {
+        if (1==1 && false) {
 
 //            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
 //            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
@@ -91,8 +91,8 @@ public class App
                 new OrTerm(
                     new FromStringTerm[]{
 //                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
-//                        new FromStringTerm("中信银行"),
-//                        new FromStringTerm("交通银行"),
+                        new FromStringTerm("中信银行"),
+                        new FromStringTerm("交通银行"),
 //                        new FromStringTerm("招商银行"),
                         new FromStringTerm("浦发银行")  // 邮件内是一个链接地址
                 }),
@@ -155,6 +155,8 @@ public class App
 
         folder.close(true);
         store.close();
+
+        System.out.println("Parse email eills completed!");
 
     }
 }

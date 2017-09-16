@@ -10,7 +10,7 @@ import java.util.Collection;
  */
 public class BillEntity {
 
-    private String userEmail;
+    private String userIdentity;
     private String customerName;
     private String billMonth;
     private String cardNumber;
@@ -27,12 +27,12 @@ public class BillEntity {
         billItems = new ArrayList<>();
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getUserIdentity() {
+        return userIdentity;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setUserIdentity(String userIdentity) {
+        this.userIdentity = userIdentity;
     }
 
     public String getCustomerName() {

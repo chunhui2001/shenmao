@@ -5,21 +5,21 @@ package com.supercard.entities;
  */
 public class BillItem {
 
-    private String billDate;    // 交易日期
+    private String transDate;    // 交易日期
     private String recordDate;  // 记账日期
-    private String cardNumber;  // 卡号末四位
-    private String currency;    // 币种
-    private String money;       // 交易币种/金额
-    private String type;        // 还款(repayment)或消费(consumption)
-    private String desc;         // 交易说明
+    private String transCardNumber;  // 卡号末四位
+    private String transCurrency;    // 币种
+    private String transMoney;       // 交易币种/金额
+    private String transType;        // 还款(repayment)或消费(consumption)
+    private String transDesc;         // 交易说明
     private String transArea;   // 交易地
 
-    public String getBillDate() {
-        return billDate;
+    public String getTransDate() {
+        return transDate;
     }
 
-    public void setBillDate(String billDate) {
-        this.billDate = billDate;
+    public void setTransDate(String transDate) {
+        this.transDate = transDate;
     }
 
     public String getRecordDate() {
@@ -30,44 +30,44 @@ public class BillItem {
         this.recordDate = recordDate;
     }
 
-    public String getCardNumber() {
-        return cardNumber;
+    public String getTransCardNumber() {
+        return transCardNumber;
     }
 
-    public void setCardNumber(String cardNumber) {
-        this.cardNumber = cardNumber;
+    public void setTransCardNumber(String transCardNumber) {
+        this.transCardNumber = transCardNumber;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getTransCurrency() {
+        return transCurrency;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setTransCurrency(String transCurrency) {
+        this.transCurrency = transCurrency;
     }
 
-    public String getMoney() {
-        return money;
+    public String getTransMoney() {
+        return transMoney;
     }
 
-    public void setMoney(String money) {
-        this.money = money;
+    public void setTransMoney(String transMoney) {
+        this.transMoney = transMoney;
     }
 
-    public String getType() {
-        return type;
+    public String getTransType() {
+        return transType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransType(String transType) {
+        this.transType = transType;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getTransDesc() {
+        return transDesc;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setTransDesc(String transDesc) {
+        this.transDesc = transDesc;
     }
 
     public String getTransArea() {

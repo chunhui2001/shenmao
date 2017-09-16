@@ -4,7 +4,6 @@ import com.supercard.BillEntity;
 import com.supercard.entities.BillItem;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
@@ -68,7 +67,7 @@ public class ParseCiticEmail extends ParseEmailBase {
 
         // parse billItems
         bill.setBillItems(parseBillItems(bill));
-        bill.setUserEmail(useremail);
+        bill.setUserIdentity(useremail);
 
 
 
@@ -90,13 +89,13 @@ public class ParseCiticEmail extends ParseEmailBase {
             billItem = new BillItem();
             tdElements = billItemsElement.get(i).select("div font");
 
-            billItem.setBillDate(tdElements.get(0).html());
+            billItem.setTransDate(tdElements.get(0).html());
             billItem.setRecordDate(tdElements.get(1).html());
-            billItem.setCardNumber(tdElements.get(2).html());
-            billItem.setDesc(escapeContent(tdElements.get(3).html()));
-            billItem.setCurrency(tdElements.get(6).html());
-            billItem.setMoney(tdElements.get(7).html());
-            billItem.setType("consumption");
+            billItem.setTransCardNumber(tdElements.get(2).html());
+            billItem.setTransDesc(escapeContent(tdElements.get(3).html()));
+            billItem.setTransCurrency(tdElements.get(6).html());
+            billItem.setTransMoney(tdElements.get(7).html());
+            billItem.setTransType("consumption");
 
             billItems.add(billItem);
 
