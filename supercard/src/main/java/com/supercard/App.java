@@ -1,10 +1,7 @@
 package com.supercard;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.supercard.cardparse.ParseCiticEmail;
-import com.supercard.cardparse.ParseCmbEmail;
-import com.supercard.cardparse.ParsePCCCEmail;
-import com.supercard.cardparse.ParseSpdbEmail;
+import com.supercard.cardparse.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.jsoup.nodes.Document;
@@ -47,7 +44,7 @@ public class App
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        if (1==1 && false) {
+        if (1==1) {
 
 //            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
 //            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
@@ -63,9 +60,11 @@ public class App
 //            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
 
 
-            ParseSpdbEmail parseSpdbEmail = new ParseSpdbEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
-            Collection<BillEntity> billEntityList = parseSpdbEmail.parse();
-            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+//            ParseSpdbEmail parseSpdbEmail = new ParseSpdbEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
+//            Collection<BillEntity> billEntityList = parseSpdbEmail.parse();
+//            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+
+            new ParseCitiBankEmail(email, null).parse();
 
             return;
         }
@@ -136,6 +135,10 @@ public class App
                     case "ccsvc@message.cmbchina.com":
                         System.out.println(from + " [招商 FOCUS][" + (i + 1) + "]");
                         billEntityList = new ParseCmbEmail(email, mimeMessage, parser).parse();
+                        break;
+                    case "citibank@emailmgmt.china.citibank.com":
+                        System.out.println(from + " [花旗 FOCUS][" + (i + 1) + "]");
+                        billEntityList = new ParseCitiBankEmail(email, mimeMessage, parser).parse();
                         break;
                     default:
                         System.out.println(from + " [IGNORE][" + (i + 1) + "]");

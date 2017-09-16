@@ -3,14 +3,15 @@ package com.supercard.cardparse;
 import com.supercard.BillEntity;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.mail.util.MimeMessageParser;
-import org.apache.http.Header;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
+import org.apache.http.*;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,11 +19,9 @@ import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -48,8 +47,8 @@ public abstract class ParseEmailBase {
 
     public ParseEmailBase(String userEmail, String htmlContent) {
         this.useremail = userEmail;
-        this.content = htmlContent;
-        this.emailHtmlDoc = Jsoup.parse(this.content);
+        this.content = htmlContent == null ? null : htmlContent;
+        this.emailHtmlDoc = htmlContent == null ? null : Jsoup.parse(htmlContent);
     }
 
     public ParseEmailBase(String userEmail, MimeMessage message, MimeMessageParser parser) throws Exception {
@@ -224,28 +223,48 @@ public abstract class ParseEmailBase {
     protected static String doPost(String url, String cookie, Object params) {
 
         String result = null;
+        CloseableHttpResponse httpResponse = null;
         HttpPost httpPost = new HttpPost(url);
 
         if (cookie != null) httpPost.setHeader("Cookie", cookie);
 
         httpPost.setHeader("User-Agent", _BROWSER_AGENT);
 
+
+        List<NameValuePair> paramsValuePair = new ArrayList<>();
+
+        for (Map.Entry<String, String> p : ((Map<String, String>)params).entrySet()) {
+            paramsValuePair.add(new BasicNameValuePair(p.getKey(), p.getValue()));
+        }
+
+        if (paramsValuePair.size() > 0) {
+            httpPost.setEntity(new UrlEncodedFormEntity(paramsValuePair, Consts.UTF_8));
+            httpPost.setHeader("Content-Type", "text/xml; charset=UTF-8");
+        }
+
+
         try {
 
-            CloseableHttpResponse homeDataActionPostResult = HttpClients.createDefault().execute(httpPost);
-
-            HttpEntity homeDataActionPostEntity = homeDataActionPostResult.getEntity();
+            httpResponse = HttpClients.createDefault().execute(httpPost);
+            HttpEntity homeDataActionPostEntity = httpResponse.getEntity();
 //            result = EntityUtils.toString(homeDataActionPostEntity);
-
             result = IOUtils.toString(homeDataActionPostEntity.getContent(), StandardCharsets.UTF_8);
-
             EntityUtils.consume(homeDataActionPostEntity);
-            homeDataActionPostResult.close();
 
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
         } catch (IOException e) {
-            return null;
-        } finally {
-
+            e.printStackTrace();
+        }finally{
+            if(httpResponse != null){
+                try {
+                    httpResponse.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         return result;
