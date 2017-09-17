@@ -236,9 +236,12 @@ public abstract class ParseEmailBase {
 
         List<NameValuePair> paramsValuePair = new ArrayList<>();
 
-        for (Map.Entry<String, String> p : ((Map<String, String>)params).entrySet()) {
-            paramsValuePair.add(new BasicNameValuePair(p.getKey(), p.getValue()));
+        if ( params != null) {
+            for (Map.Entry<String, String> p : ((Map<String, String>)params).entrySet()) {
+                paramsValuePair.add(new BasicNameValuePair(p.getKey(), p.getValue()));
+            }
         }
+
 
         if (paramsValuePair.size() > 0) {
             httpPost.setEntity(new UrlEncodedFormEntity(paramsValuePair, Consts.UTF_8));
