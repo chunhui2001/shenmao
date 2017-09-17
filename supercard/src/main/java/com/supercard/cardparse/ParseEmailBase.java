@@ -18,8 +18,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import javax.mail.internet.MimeMessage;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -40,6 +39,7 @@ public abstract class ParseEmailBase {
     protected Document emailHtmlDoc = null;
     protected Elements orderElements = null;
     protected Date receivDate = null;
+    protected MimeMessage mimeMessage = null;
 
     public ParseEmailBase() {
 
@@ -53,6 +53,7 @@ public abstract class ParseEmailBase {
 
     public ParseEmailBase(String userEmail, MimeMessage message, MimeMessageParser parser) throws Exception {
 
+        this.mimeMessage = message;
         this.parser = parser;
         this.useremail = userEmail;
         this.from = parser.getFrom();
@@ -138,7 +139,7 @@ public abstract class ParseEmailBase {
         this.receivDate = receivDate;
     }
 
-    abstract public Collection<BillEntity> parse();
+    abstract public Collection<BillEntity> parse() throws IOException;
 
     protected String escapeContent(String content) {
         return Pattern.compile("(&nbsp;|\\s)+").matcher(content).replaceAll(" ");
@@ -270,5 +271,44 @@ public abstract class ParseEmailBase {
         return result;
 
     }
+
+
+
+    protected static File saveFile(String dir, String fileName, InputStream input) {
+
+
+        File savefile = new File(dir, fileName);
+
+        BufferedOutputStream bos = null;
+        try {
+
+            bos = new BufferedOutputStream(
+                    new FileOutputStream(savefile));
+            byte[] buff = new byte[2048];
+            InputStream is = input;
+            int ret = 0;
+
+            try {
+
+                while ((ret = is.read(buff)) > 0) {
+                    bos.write(buff, 0, ret);
+                }
+
+                bos.close();
+                is.close();
+
+            } catch (IOException e) {
+                savefile = null;
+            }
+
+        } catch (FileNotFoundException e) {
+            savefile = null;
+        }
+
+
+
+        return savefile;
+    }
+
 
 }

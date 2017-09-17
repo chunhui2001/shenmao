@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Properties;
 
 import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.search.*;
 
@@ -64,7 +65,9 @@ public class App
 //            Collection<BillEntity> billEntityList = parseSpdbEmail.parse();
 //            System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
 
-            new ParseCitiBankEmail(email, null).parse();
+//            new ParseCitiBankEmail(email, null).parse();
+
+            new ParseCgbEmail(email, null).parse();
 
             return;
         }
@@ -90,10 +93,10 @@ public class App
         Message message[] = folder.search(new AndTerm(
                 new OrTerm(
                     new FromStringTerm[]{
-//                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
+                        new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
 //                        new FromStringTerm("中信银行"),
 //                        new FromStringTerm("交通银行"),
-                        new FromStringTerm("招商银行"),
+//                        new FromStringTerm("招商银行"),           // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
 //                        new FromStringTerm("浦发银行")  // 邮件内是一个链接地址
                 }),
                 new OrTerm(
@@ -131,6 +134,7 @@ public class App
                         break;
                     case "creditcard@cgbchina.com.cn":
                         System.out.println(from + " [广发 FOCUS][" + (i + 1) + "]");
+                        billEntityList = new ParseCgbEmail(email, mimeMessage, parser).parse();
                         break;
                     case "ccsvc@message.cmbchina.com":
                         System.out.println(from + " [招商 FOCUS][" + (i + 1) + "]");
