@@ -45,7 +45,7 @@ public class App
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        if (1==1) {
+        if (1==2) {
 
 //            ParsePCCCEmail parsePCCCEmail = new ParsePCCCEmail(email, readFile("/Users/keesh/Desktop/demo.html"));
 //            Collection<BillEntity> billEntityList = parsePCCCEmail.parse();
@@ -117,31 +117,33 @@ public class App
 
             Collection<BillEntity> billEntityList = null;
 
+            System.out.println("");
+
             try {
 
                 switch (from) {
                     case "PCCC@bocomcc.com":
-                        System.out.println(from + " [交通 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [交通 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParsePCCCEmail(email, mimeMessage, parser).parse();
                         break;
                     case "citiccard@citiccard.com":
-                        System.out.println(from + " [中信 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [中信 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCiticEmail(email, mimeMessage, parser).parse();
                         break;
                     case "estmtservice@eb.spdbccc.com.cn":
-                        System.out.println(from + " [浦发 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [浦发 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseSpdbEmail(email, mimeMessage, parser).parse();
                         break;
                     case "creditcard@cgbchina.com.cn":
-                        System.out.println(from + " [广发 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [广发 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCgbEmail(email, mimeMessage, parser).parse();
                         break;
                     case "ccsvc@message.cmbchina.com":
-                        System.out.println(from + " [招商 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [招商 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCmbEmail(email, mimeMessage, parser).parse();
                         break;
                     case "citibank@emailmgmt.china.citibank.com":
-                        System.out.println(from + " [花旗 FOCUS][" + (i + 1) + "]");
+                        System.out.println("============== " + from + " [花旗 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCitiBankEmail(email, mimeMessage, parser).parse();
                         break;
                     default:
@@ -155,18 +157,16 @@ public class App
                 System.out.print(from + "ERROR");
             }
 
-//            billEntityList.stream().forEach(b -> System.out.println(b.getReceivDate()));
-
-
             System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
-
+            System.out.println("============== *************** ==============");
 
         }
 
         folder.close(true);
         store.close();
 
-        System.out.println("Parse email bills completed!");
+        System.out.println("");
+        System.out.println("DONE! Parse email bills completed! DONE!");
 
     }
 }
