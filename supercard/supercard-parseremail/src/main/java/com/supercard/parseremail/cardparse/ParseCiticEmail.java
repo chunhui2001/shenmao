@@ -61,6 +61,8 @@ public class ParseCiticEmail extends ParseEmailBase {
 
         Elements billTdelements = this.emailHtmlDoc.select("span#fixBand33 span#fixBand3 span#loopBand2 span#fixBand5 div font");
 
+
+        bill.setBank("中信");
         bill.setCardNumber(billTdelements.get(0).html());
         bill.setBillMoney(billTdelements.get(5).html());
         bill.setBillMoneyMin(billTdelements.get(6).html());

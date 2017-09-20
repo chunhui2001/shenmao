@@ -175,6 +175,7 @@ public class ParseCgbEmail extends ParseEmailBase {
             bill.setBillMonth(bill.getBillBoundMin().split("/")[0] + bill.getBillBoundMin().split("/")[1]);
         }
 
+        bill.setBank("广发");
         bill.setBillItems(parseBillItems(_content, bill));
         bill.setUserIdentity(useremail);
         bill.setReceivDate(this.getReceivDate());

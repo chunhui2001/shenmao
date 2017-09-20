@@ -40,6 +40,8 @@ public class ParsePCCCEmail extends ParseEmailBase {
 
             BillEntity bill = new BillEntity();
 
+
+            bill.setBank("交通");
             bill.setUserIdentity(this.useremail);
 
             Element element1 = element.select("#container>div").first();

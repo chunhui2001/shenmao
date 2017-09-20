@@ -65,6 +65,8 @@ public class ParseSpdbEmail extends ParseEmailBase {
 
         BillEntity billEntity = new BillEntity();
 
+
+        billEntity.setBank("浦发");
         billEntity.setUserIdentity(this.useremail);
         billEntity.setBillMoney(billMap.get("cash"));
         billEntity.setBillMoneyMin(billMap.get("minPay"));

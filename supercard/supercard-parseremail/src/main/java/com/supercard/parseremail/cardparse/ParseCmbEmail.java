@@ -180,6 +180,7 @@ public class ParseCmbEmail extends ParseEmailBase {
             bill.setBillMonth(bill.getBillBoundMin().split("/")[0] + "/" + bill.getBillMonth());
         }
 
+        bill.setBank("招商");
         bill.setBillItems(parseBillItems(bill));
         bill.setUserIdentity(useremail);
         bill.setReceivDate(this.getReceivDate());
