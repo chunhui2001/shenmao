@@ -1,4 +1,4 @@
-package supercard-lab;
+package com.supercard.lab;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

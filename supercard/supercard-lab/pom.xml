@@ -10,8 +10,8 @@
     <version>1.0-SNAPSHOT</version>
   </parent>
   
-  <groupId>supercard-lab</groupId>
-  <artifactId>superecard-lab</artifactId>
+  <groupId>com.supercard.lab</groupId>
+  <artifactId>supercard-lab</artifactId>
   <version>1.0-SNAPSHOT</version>
   
   <name>superecard-lab</name>
