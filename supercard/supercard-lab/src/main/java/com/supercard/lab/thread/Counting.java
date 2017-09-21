@@ -29,7 +29,7 @@ public class Counting {
                 这种设计为其它调用 getCount() 的代码留下了隐患！！！
                 因为:
                 [****] 除了 increment() 函数, getCount() 方法也需要进行同步，
-                [****] 否则调用 getCount() 的线程可能得到一个失效的值,
+                [****] 由于内存可见性问题, 调用 getCount() 的线程可能得到一个失效的值,
                 [****] 在当前程序中由于 getCount() 在 join() 之后被调用, 因此是线程安全的.
              */
             public int getCount() { return this.count; }
