@@ -52,4 +52,6 @@ netty-a4
 dependency-reduced-pom.xml
 supercard.iml
 
+*.iml
+
 target

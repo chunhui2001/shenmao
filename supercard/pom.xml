@@ -71,5 +71,6 @@
     <module>supercard-repository</module>
     <module>supercard-parseremail</module>
     <module>supercard-tour</module>
+    <module>superecard-lab</module>
   </modules>
 </project>
