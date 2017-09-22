@@ -1,10 +1,10 @@
-package com.supercard.lab.thread;
+package com.supercard.lab.thread.counting;
 
 /*
     用锁达到线程互斥的目的，
     即某一时间至多有一个线程能持有锁
  */
-public class Counting {
+public class CountingSynchronized {
 
 
 
@@ -14,7 +14,7 @@ public class Counting {
 
             private int count = 0;
 
-            public void increment() { count++; }
+//            public void increment() { count++; }
 
             /*
                 使用对象内置锁 synchornized,
@@ -23,7 +23,7 @@ public class Counting {
                 其它线程调用函数时将被阻塞直到锁被释放，
                 对于这种只涉及一个变量的场景使用 java.util.concurrent.atomic 包是更好的选择
             */
-//            public synchronized void increment() { count++; }
+            public synchronized void increment() { count++; }
 
             /*
                 这种设计为其它调用 getCount() 的代码留下了隐患！！！
