@@ -89,7 +89,7 @@ public class PhilosopherCondition extends Thread {
 
     public static void main(String[] args) throws InterruptedException {
 
-        int philosopherCount = 50;                      // 哲学家数量
+        int philosopherCount = 500;                      // 哲学家数量
 
         ReentrantLock table = new ReentrantLock();      // 一个桌子
         PhilosopherCondition[] philosopherConditions = new PhilosopherCondition[philosopherCount];        // 哲学家队列
