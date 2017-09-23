@@ -1,34 +1,12 @@
-package com.supercard.lab.thread.wordcound;
+package com.supercard.lab.thread.wordcount;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-public class WordCounter implements Runnable {
+public class WordCounter extends WordCountHelper implements Runnable {
 
-
-    public static String formatTime(Long ms) {
-
-        Integer ss = 1000, mi = ss * 60, hh = mi * 60, dd = hh * 24;
-
-        Long day = ms / dd;
-        Long hour = (ms - day * dd) / hh;
-        Long minute = (ms - day * dd - hour * hh) / mi;
-        Long second = (ms - day * dd - hour * hh - minute * mi) / ss;
-        Long milliSecond = ms - day * dd - hour * hh - minute * mi - second * ss;
-
-        StringBuffer sb = new StringBuffer();
-        if(day > 0) sb.append(day+"天");
-        if(hour > 0) sb.append(hour+"小时");
-        if(minute > 0) sb.append(minute+"分");
-        if(second > 0) sb.append(second+"秒");
-
-        if(milliSecond > 0) sb.append(milliSecond+"毫秒");
-
-        return sb.toString();
-    }
 
     private BlockingQueue<PageAbstract> pages;
     private Map<String, Integer> wordcounts;
@@ -79,15 +57,12 @@ public class WordCounter implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
 
-        String enwikiFilename = "/Users/keesh/Desktop/enwiki.xml";
-
-
         ArrayBlockingQueue<PageAbstract> pages = new ArrayBlockingQueue<PageAbstract>(100);
         HashMap<String, Integer> counts = new HashMap<>();
 
         long begin = System.currentTimeMillis();
 
-        Thread producer = new Thread(new Parser(100000, enwikiFilename, pages));
+        Thread producer = new Thread(new Parser(_PAGE_COUNT, _FILE_NAME, pages));
         Thread customer = new Thread(new WordCounter(pages, counts));
 
         customer.start();

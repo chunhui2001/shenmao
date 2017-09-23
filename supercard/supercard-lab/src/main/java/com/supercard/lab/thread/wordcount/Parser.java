@@ -1,4 +1,4 @@
-package com.supercard.lab.thread.wordcound;
+package com.supercard.lab.thread.wordcount;
 
 import java.util.concurrent.BlockingQueue;
 

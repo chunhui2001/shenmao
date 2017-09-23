@@ -1,4 +1,4 @@
-package com.supercard.lab.thread.wordcound;
+package com.supercard.lab.thread.wordcount;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -6,30 +6,29 @@ import javax.xml.stream.events.XMLEvent;
 import java.io.FileInputStream;
 import java.util.Iterator;
 
-public class WikiPages implements Iterable<PageAbstract> {
+public class Pages implements Iterable<Page> {
 
     private final int maxPages;
     private final String fileName;
 
-    public WikiPages(int maxPages, String fileName) {
+    public Pages(int maxPages, String fileName) {
         this.maxPages = maxPages;
         this.fileName = fileName;
     }
 
-    private class WikiPageIterator implements Iterator<PageAbstract> {
+    private class PageIterator implements Iterator<Page> {
 
         private XMLEventReader reader;
         private int remainingPages;
-        private boolean nosuchelement;
 
-        public WikiPageIterator() throws Exception {
+        public PageIterator() throws Exception {
             remainingPages = maxPages;
             reader = XMLInputFactory.newInstance().createXMLEventReader(new FileInputStream(fileName));
         }
 
-        public boolean hasNext() { return !nosuchelement && remainingPages > 0; }
+        public boolean hasNext() { return remainingPages > 0; }
 
-        public PageAbstract next() {
+        public Page next() {
 
             try {
 
@@ -59,7 +58,7 @@ public class WikiPages implements Iterable<PageAbstract> {
                             if (event.asEndElement().getName().getLocalPart().equals("page")) {
                                 --remainingPages;
 //                                System.out.println(title);
-                                return new WikiPage(title, text);
+                                return new Page(title, text);
                             }
                         }
                     }
@@ -71,9 +70,7 @@ public class WikiPages implements Iterable<PageAbstract> {
             }
 
 //            throw new NoSuchElementException();
-//            return null;
-            nosuchelement = true;
-            return new PagePoisonPill();
+            return null;
 
         }
 
@@ -81,10 +78,10 @@ public class WikiPages implements Iterable<PageAbstract> {
 
     }
 
-    public Iterator<PageAbstract> iterator() {
+    public Iterator<Page> iterator() {
 
         try {
-            return new WikiPages.WikiPageIterator();
+            return new PageIterator();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
