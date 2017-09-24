@@ -30,17 +30,21 @@ public class App
     public static void main( String[] args ) throws Exception {
 
 
-        Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-        scheduler.start();
-        scheduler.scheduleJob(
-                JobBuilder.newJob(BillEmailScanJob.class).withIdentity("dummyJobName", "group1").build(),
-                TriggerBuilder
-                        .newTrigger()
-                        .withIdentity("dummyTriggerName", "group1")
-                        .startNow()
-                        .withSchedule(
-                                CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
-                        .build());
+//        Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+//        scheduler.start();
+//        scheduler.scheduleJob(
+//                JobBuilder.newJob(BillEmailScanJob.class).withIdentity("dummyJobName", "group1").build(),
+//                TriggerBuilder
+//                        .newTrigger()
+//                        .withIdentity("dummyTriggerName", "group1")
+//                        .startNow()
+//                        .withSchedule(
+//                                CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
+//                        .build());
+
+        BillEmailScanJob BillEmailScanJob = new BillEmailScanJob();
+
+        BillEmailScanJob.start();
 
     }
 }

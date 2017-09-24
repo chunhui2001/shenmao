@@ -1,16 +1,20 @@
 package com.supercard.lab.thread.wordcount;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class WordCountConcurrentMap extends WordCountHelper implements Runnable {
+public class WordCountConcurrentMapReduce extends WordCountHelper implements Runnable {
 
     private BlockingQueue<PageAbstract> pages;
     private ConcurrentMap<String, Integer> wordcounts;
+    private HashMap<String, Integer> localCounts;
 
-    public WordCountConcurrentMap(BlockingQueue<PageAbstract> pages, ConcurrentMap<String, Integer> wordcounts) {
+    public WordCountConcurrentMapReduce(BlockingQueue<PageAbstract> pages, ConcurrentMap<String, Integer> wordcounts) {
         this.pages = pages;
         this.wordcounts = wordcounts;
+        this.localCounts = new HashMap<String, Integer>();
     }
 
     @Override
@@ -34,6 +38,8 @@ public class WordCountConcurrentMap extends WordCountHelper implements Runnable 
 
             }
 
+            mergeCounts();
+
         } catch (Exception e) {}
 
     }
@@ -41,24 +47,7 @@ public class WordCountConcurrentMap extends WordCountHelper implements Runnable 
 
     private void countWord(String word) {
 
-        /* lock.lock();
-
-        try {
-
-            Integer currentCount = wordcounts.get(word);
-
-            if (currentCount == null) {
-                wordcounts.put(word, 1);
-                return;
-            }
-
-            wordcounts.put(word, currentCount + 1);
-
-        } finally {
-            lock.unlock();
-        } */
-
-        while (true) {
+        /* while (true) {
 
             Integer currentCount = wordcounts.get(word);
             if (currentCount == null) {
@@ -66,6 +55,38 @@ public class WordCountConcurrentMap extends WordCountHelper implements Runnable 
                     break;
             } else if (wordcounts.replace(word, currentCount, currentCount + 1)) {
                 break;
+            }
+
+        } */
+
+        Integer currentCount = localCounts.get(word);
+
+        if (currentCount == null)
+            localCounts.put(word, 1);
+        else
+            localCounts.put(word, currentCount + 1);
+
+    }
+
+
+    private void mergeCounts() {
+
+        for (Map.Entry<String, Integer> e: localCounts.entrySet()) {
+
+            String word = e.getKey();
+            Integer count = e.getValue();
+
+            while (true) {
+
+                Integer currentCount = wordcounts.get(word);
+
+                if (currentCount == null) {
+                    if (wordcounts.putIfAbsent(word, count) == null)
+                        break;
+                } else if (wordcounts.replace(word, currentCount, currentCount + count)) {
+                    break;
+                }
+
             }
 
         }
@@ -84,16 +105,10 @@ public class WordCountConcurrentMap extends WordCountHelper implements Runnable 
 
         Thread producer = new Thread(new Parser(_PAGE_COUNT, _FILE_NAME, pages));
 
-//        ExecutorService productorExecutor = Executors.newCachedThreadPool();
         ExecutorService customerExecutor = Executors.newCachedThreadPool();
 
-
-//        for (int i=0; i<_NUM_COUNTERS; i++) {
-//            productorExecutor.execute(new Parser(_PAGE_COUNT, _FILE_NAME, pages));
-//        }
-
         for (int i=0; i<_NUM_COUNTERS; i++) {
-            customerExecutor.execute(new WordCountConcurrentMap(pages, counts));
+            customerExecutor.execute(new WordCountConcurrentMapReduce(pages, counts));
         }
 
         producer.start();
@@ -104,15 +119,8 @@ public class WordCountConcurrentMap extends WordCountHelper implements Runnable 
             pages.put(new PagePoisonPill());
         }
 
-
-
         customerExecutor.shutdown();
         customerExecutor.awaitTermination(10L, TimeUnit.MINUTES);
-
-//
-//        productorExecutor.shutdown();
-//        productorExecutor.awaitTermination(10L, TimeUnit.MINUTES);
-
 
         System.out.println("耗时: " + formatTime(System.currentTimeMillis() - begin));
         System.out.println("All words name's count: " + counts.size());

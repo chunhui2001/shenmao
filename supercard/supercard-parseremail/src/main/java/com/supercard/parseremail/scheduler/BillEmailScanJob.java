@@ -23,9 +23,7 @@ import java.util.Properties;
 
 public class BillEmailScanJob implements Job {
 
-    @Override
-    public void execute(JobExecutionContext context) throws JobExecutionException {
-
+    public void start() {
 
         String host = "pop.qq.com";
         String email = "76920104@qq.com";
@@ -159,6 +157,13 @@ public class BillEmailScanJob implements Job {
 
         System.out.println("Hello Quartz!" +
                 new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+    }
+
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+
+        this.start();
+
     }
 
 }
