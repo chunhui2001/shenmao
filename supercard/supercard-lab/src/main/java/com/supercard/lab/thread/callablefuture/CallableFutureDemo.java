@@ -63,11 +63,14 @@ public class CallableFutureDemo {
         executorService.shutdown();
 
         try {
-            System.out.println("The future result is: " + futureResult.get());
+
+            Integer result = (Integer)futureResult.get();
+            System.out.println("The future result is: " + result);
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            System.out.println(e.getCause().getMessage());
         }
 
     }
