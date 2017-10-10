@@ -63,7 +63,16 @@ public class BillRepository
     }
 
     public void save(Collection<BillEntity> billList) {
-        this.save(billList.stream().collect(Collectors.toList()));
+
+        if (billList == null) return;
+
+        try {
+            this.save(billList.stream().collect(Collectors.toList()));
+        } catch (Exception e) {
+            String s = e.getMessage();
+
+        }
+
     }
 
     public void save(List<BillEntity> billList) {

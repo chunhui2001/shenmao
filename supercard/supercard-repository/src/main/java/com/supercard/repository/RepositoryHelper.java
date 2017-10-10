@@ -16,6 +16,8 @@ public class RepositoryHelper {
 
     private static final String _mongoServerHost = "localhost";
     private static final String _dbname = "supercard_db";
+    private static final String _usename = "root";
+    private static final String _passwd = "Cc";
 
     public static MongoCollection<BillEntity>  getCollection(String docname, Class<BillEntity> tClass) {
 

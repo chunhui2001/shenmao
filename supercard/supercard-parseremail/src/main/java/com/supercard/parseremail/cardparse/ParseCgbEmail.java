@@ -5,6 +5,7 @@ import com.supercard.tour.BillItemEntity;
 import org.apache.commons.mail.util.MimeMessageParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.jsoup.select.Elements;
 
 import javax.activation.DataSource;
 import javax.mail.internet.MimeMessage;
@@ -152,35 +153,79 @@ public class ParseCgbEmail extends ParseEmailBase {
     @Override
     public Collection<BillEntity> parse() throws IOException {
 
+        BillEntity bill = new BillEntity();
+
         File attacheBill = getAttachBill();
+
+        if (attacheBill == null) {
+
+            // 新账单，非补发
+            String custNameAndGenderHtml = emailHtmlDoc.select("div#fixBand8 div>font").first().html();
+            String billBoundHtml = emailHtmlDoc.select("div#fixBand32 div>font").last().html();    // 2017/09/06 至 2017/10/05
+            Elements billItemElements = emailHtmlDoc.select("div#reportPanel1 div#fixBand4 table table font");
+
+            Pattern custNameAndGenderPattern = Pattern.compile("尊敬的([\\W\\w]+)(先生|女士)+,");
+            Pattern datePattern = Pattern.compile("([\\d]{4}/[\\d]{2}/[\\d]{2})");
+
+            Matcher custNameAndGenderMatcher = custNameAndGenderPattern.matcher(custNameAndGenderHtml);
+            Matcher dateMatcher = datePattern.matcher(billBoundHtml);
+
+            if (custNameAndGenderMatcher.find()) {
+                bill.setCustomerName(custNameAndGenderMatcher.group(1));
+                bill.setGender(custNameAndGenderMatcher.group(2));
+            }
+
+            if (dateMatcher.find()) {
+                bill.setBillBoundMin(dateMatcher.group(1));
+                dateMatcher.find();
+                bill.setBillBoundMax(dateMatcher.group(1));
+            }
+
+            bill.setCardNumber(billItemElements.get(0).html());
+            bill.setBillMoney(billItemElements.get(1).html());
+            bill.setBillMoneyMin(billItemElements.get(2).html());
+            bill.setBillExpired(billItemElements.get(3).html());
+            bill.setCurrency(billItemElements.get(4).html());
+//            bill.setCardNumber(billItemElements.get(5).html());
+
+            bill.setBank("广发");
+            bill.setUserIdentity(useremail);
+            bill.setReceivDate(this.getReceivDate());
+
+            // TODO 账单归属月份, 本期还款金额，待补充
+
+            return new ArrayList<BillEntity>() {{ add(bill); }};
+
+        } else {
 
 //        File attacheBill = new File("/Users/keesh/Downloads/综合对账单打印版_20170910014535.pdf");
 
-        String _content = getPdfBillContent(attacheBill);
+            String _content = getPdfBillContent(attacheBill);
 
-        Pattern custNameAndAddressPattern = Pattern.compile("积分按卡号汇总情况\\s{1,}([\\+ ＝\\－]{4}?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\d]{25})\\s{1,}/");
-        Pattern billBoundPattern = Pattern.compile("(\\d{4}/\\d{2}/\\d{2})\\s{1,}-\\s{1,}(\\d{4}/\\d{2}/\\d{2})");
+            Pattern custNameAndAddressPattern = Pattern.compile("积分按卡号汇总情况\\s{1,}([\\+ ＝\\－]{4}?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\W\\w]+?)\\s{1,}([\\d]{25})\\s{1,}/");
+            Pattern billBoundPattern = Pattern.compile("(\\d{4}/\\d{2}/\\d{2})\\s{1,}-\\s{1,}(\\d{4}/\\d{2}/\\d{2})");
 
-        Matcher custNameAndAddressMatcher = custNameAndAddressPattern.matcher(_content);
-        Matcher cardNumberMatcher = _CARD_NUMBER_PATTERN.matcher(_content);
-        Matcher billBoundMatcher = billBoundPattern.matcher(_content);
+            Matcher custNameAndAddressMatcher = custNameAndAddressPattern.matcher(_content);
+            Matcher cardNumberMatcher = _CARD_NUMBER_PATTERN.matcher(_content);
+            Matcher billBoundMatcher = billBoundPattern.matcher(_content);
 
-        BillEntity bill = new BillEntity();
 
-        if (custNameAndAddressMatcher.find()) bill.setCustomerName(custNameAndAddressMatcher.group(2));
-        if (cardNumberMatcher.find()) bill.setCardNumber(cardNumberMatcher.group(1));
-        if (billBoundMatcher.find()) {
-            bill.setBillBoundMin(billBoundMatcher.group(1));
-            bill.setBillBoundMax(billBoundMatcher.group(2));
-            bill.setBillMonth(bill.getBillBoundMin().split("/")[0] + bill.getBillBoundMin().split("/")[1]);
+            if (custNameAndAddressMatcher.find()) bill.setCustomerName(custNameAndAddressMatcher.group(2));
+            if (cardNumberMatcher.find()) bill.setCardNumber(cardNumberMatcher.group(1));
+            if (billBoundMatcher.find()) {
+                bill.setBillBoundMin(billBoundMatcher.group(1));
+                bill.setBillBoundMax(billBoundMatcher.group(2));
+                bill.setBillMonth(bill.getBillBoundMin().split("/")[0] + bill.getBillBoundMin().split("/")[1]);
+            }
+
+            bill.setBank("广发");
+            bill.setBillItems(parseBillItems(_content, bill));
+            bill.setUserIdentity(useremail);
+            bill.setReceivDate(this.getReceivDate());
+
+            return new ArrayList<BillEntity>() {{ add(bill); }};
         }
 
-        bill.setBank("广发");
-        bill.setBillItems(parseBillItems(_content, bill));
-        bill.setUserIdentity(useremail);
-        bill.setReceivDate(this.getReceivDate());
-
-        return new ArrayList<BillEntity>() {{ add(bill); }};
 
     }
 }

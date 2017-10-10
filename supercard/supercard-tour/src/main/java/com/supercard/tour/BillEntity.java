@@ -25,6 +25,7 @@ public final class BillEntity {
     private String billMoneyMin;
     private String gender;
     private String bank;
+    private String currency;
 
 
     public ObjectId getId() {
@@ -145,6 +146,14 @@ public final class BillEntity {
 
     public void setBank(String bank) {
         this.bank = bank;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
+    public String getCurrency() {
+        return this.currency;
     }
 
 }

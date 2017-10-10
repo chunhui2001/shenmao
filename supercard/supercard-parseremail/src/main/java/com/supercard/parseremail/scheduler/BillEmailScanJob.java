@@ -23,7 +23,7 @@ import java.util.Properties;
 
 public class BillEmailScanJob implements Job {
 
-    public void start() {
+    public void start() throws Exception {
 
         String host = "pop.qq.com";
         String email = "76920104@qq.com";
@@ -54,11 +54,11 @@ public class BillEmailScanJob implements Job {
             message = folder.search(new AndTerm(
                     new OrTerm(
                             new FromStringTerm[]{
-                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的
-                                    new FromStringTerm("中信银行"),
-                                    new FromStringTerm("交通银行"),
-                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
-                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
+                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的, 新账单无明细，只能通过app查看
+//                                    new FromStringTerm("中信银行"),
+//                                    new FromStringTerm("交通银行"),
+//                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
+//                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
                             }),
                     new OrTerm(
                             new SubjectTerm[]{
@@ -89,9 +89,12 @@ public class BillEmailScanJob implements Job {
                 e.printStackTrace();
             }
 
+
+
             Collection<BillEntity> billEntityList = null;
 
             System.out.println("");
+
 
             try {
 
@@ -127,8 +130,9 @@ public class BillEmailScanJob implements Job {
                 }
 
             } catch (Exception e) {
-                System.out.print(parser.getHtmlContent());
-                System.out.print(from + "ERROR");
+                System.out.println(e.getMessage());
+                System.out.println(parser.getHtmlContent());
+                System.out.println(from + " ERROR " + "[" + parser.getSubject() + "]");
             }
 
             // save
@@ -154,15 +158,21 @@ public class BillEmailScanJob implements Job {
         System.out.println("");
         System.out.println("DONE! Parse email bills completed! DONE!");
 
+//        System.out.println("Hello Quartz!" +
+//                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-        System.out.println("Hello Quartz!" +
-                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
     }
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
 
-        this.start();
+        try {
+            this.start();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
