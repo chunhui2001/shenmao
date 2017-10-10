@@ -78,6 +78,7 @@ public class BillRepository
     public void save(List<BillEntity> billList) {
 
         // billCollection.insertMany(billList);
+        int i = 0;
 
         billList.stream().filter( bill -> {
             return !this.exists(bill.getBank(), bill.getBillMonth());

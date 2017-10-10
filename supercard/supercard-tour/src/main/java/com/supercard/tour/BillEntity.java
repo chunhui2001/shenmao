@@ -26,6 +26,9 @@ public final class BillEntity {
     private String gender;
     private String bank;
     private String currency;
+    private String subject;
+    private String billContent;
+    private String contentType;     // html, pdf,
 
 
     public ObjectId getId() {
@@ -154,6 +157,30 @@ public final class BillEntity {
 
     public String getCurrency() {
         return this.currency;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getSubject() {
+        return this.subject;
+    }
+
+    public void setBillContent(String billContent) {
+        this.billContent = billContent;
+    }
+
+    public String getBillContent() {
+        return this.billContent;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
+    public String getContentType() {
+        return this.contentType;
     }
 
 }

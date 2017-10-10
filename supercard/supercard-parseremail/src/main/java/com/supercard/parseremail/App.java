@@ -42,9 +42,7 @@ public class App
 //                                CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
 //                        .build());
 
-        BillEmailScanJob BillEmailScanJob = new BillEmailScanJob();
-
-        BillEmailScanJob.start();
+        ParseEmailEngine.run();
 
     }
 }

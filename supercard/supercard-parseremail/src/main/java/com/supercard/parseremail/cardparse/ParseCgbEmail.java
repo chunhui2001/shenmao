@@ -151,7 +151,7 @@ public class ParseCgbEmail extends ParseEmailBase {
     }
 
     @Override
-    public Collection<BillEntity> parse() throws IOException {
+    public Collection<BillEntity> parse() {
 
         BillEntity bill = new BillEntity();
 
@@ -164,11 +164,17 @@ public class ParseCgbEmail extends ParseEmailBase {
             String billBoundHtml = emailHtmlDoc.select("div#fixBand32 div>font").last().html();    // 2017/09/06 至 2017/10/05
             Elements billItemElements = emailHtmlDoc.select("div#reportPanel1 div#fixBand4 table table font");
 
+            Pattern billMonthPattern = Pattern.compile("以下是您([\\d]{4})年([\\d]{2})月的信用卡电子账单");
             Pattern custNameAndGenderPattern = Pattern.compile("尊敬的([\\W\\w]+)(先生|女士)+,");
             Pattern datePattern = Pattern.compile("([\\d]{4}/[\\d]{2}/[\\d]{2})");
 
             Matcher custNameAndGenderMatcher = custNameAndGenderPattern.matcher(custNameAndGenderHtml);
             Matcher dateMatcher = datePattern.matcher(billBoundHtml);
+            Matcher billMonthMatcher = billMonthPattern.matcher(this.content);
+
+            if (billMonthMatcher.find()) {
+                bill.setBillMonth(billMonthMatcher.group(1) + billMonthMatcher.group(2));
+            }
 
             if (custNameAndGenderMatcher.find()) {
                 bill.setCustomerName(custNameAndGenderMatcher.group(1));
@@ -191,8 +197,11 @@ public class ParseCgbEmail extends ParseEmailBase {
             bill.setBank("广发");
             bill.setUserIdentity(useremail);
             bill.setReceivDate(this.getReceivDate());
+            bill.setSubject(this.subject);
+            bill.setBillContent(this.content);
+            bill.setContentType("HTML");
 
-            // TODO 账单归属月份, 本期还款金额，待补充
+            // TODO 本期还款金额，待补充
 
             return new ArrayList<BillEntity>() {{ add(bill); }};
 
@@ -210,7 +219,10 @@ public class ParseCgbEmail extends ParseEmailBase {
             Matcher billBoundMatcher = billBoundPattern.matcher(_content);
 
 
-            if (custNameAndAddressMatcher.find()) bill.setCustomerName(custNameAndAddressMatcher.group(2));
+            if (custNameAndAddressMatcher.find()) {
+                bill.setCustomerName(custNameAndAddressMatcher.group(2));
+                if (bill.getCustomerName().equals("调额信息")) bill.setCustomerName(custNameAndAddressMatcher.group(3));
+            }
             if (cardNumberMatcher.find()) bill.setCardNumber(cardNumberMatcher.group(1));
             if (billBoundMatcher.find()) {
                 bill.setBillBoundMin(billBoundMatcher.group(1));
@@ -222,6 +234,9 @@ public class ParseCgbEmail extends ParseEmailBase {
             bill.setBillItems(parseBillItems(_content, bill));
             bill.setUserIdentity(useremail);
             bill.setReceivDate(this.getReceivDate());
+            bill.setSubject(this.subject);
+            bill.setBillContent(_content);
+            bill.setContentType("PDF");
 
             return new ArrayList<BillEntity>() {{ add(bill); }};
         }
