@@ -87,7 +87,7 @@ public class ParseEmailEngine {
             new BillRepository().save(billEntityList);
 
             try {
-                System.out.println( new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + new ObjectMapper().writeValueAsString(billEntityList));
+                System.out.println( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + new ObjectMapper().writeValueAsString(billEntityList));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,8 @@
 package com.supercard.tour;
 
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.bson.types.ObjectId;
 
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.Date;
  */
 public final class BillEntity {
 
+//    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonSerialize(using = ObjectIdJsonSerializer.class)
     private ObjectId id;
 
     private String userIdentity;
@@ -52,6 +56,7 @@ public final class BillEntity {
     private Collection<BillItemEntity> billItems;
 
     public BillEntity() {
+        this.id = new ObjectId();
         billItems = new ArrayList<>();
     }
 

@@ -1,5 +1,6 @@
 package com.supercard.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
 import com.mongodb.MongoClient;
@@ -11,9 +12,12 @@ import com.supercard.tour.BillEntity;
 import com.supercard.tour.BillItemEntity;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
+import org.bson.types.ObjectId;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,12 +51,12 @@ public class BillRepository
 
     }
 
-    public boolean exists(String bank, String billMonth) {
+    public ObjectId exists(String bank, String billMonth) {
         try {
             BillEntity b = billCollection.find(and (eq("bank", bank), eq("billMonth", billMonth))).limit(1).first();
-            return b != null;
+            return b == null ? null : b.getId();
         } catch (Exception e) {
-            return false;
+            return null;
         }
     }
 
@@ -81,7 +85,9 @@ public class BillRepository
         int i = 0;
 
         billList.stream().filter( bill -> {
-            return !this.exists(bill.getBank(), bill.getBillMonth());
+            ObjectId oid = this.exists(bill.getBank(), bill.getBillMonth());
+            if (oid != null) bill.setId(oid);
+            return oid == null;
         }).forEach( bill -> {
             this.save(bill);
         });
