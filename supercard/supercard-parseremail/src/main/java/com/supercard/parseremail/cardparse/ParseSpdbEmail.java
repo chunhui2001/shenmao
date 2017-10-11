@@ -76,6 +76,10 @@ public class ParseSpdbEmail extends ParseEmailBase {
         billEntity.setGender(billMap.get("userName").split(" ")[1]);
         billEntity.setCardNumber(billMap.get("cardNo"));
 
+        billEntity.setReceivDate(this.getReceivDate());
+        billEntity.setSubject(this.subject);
+        billEntity.setBillContent(this.content);
+        billEntity.setContentType("HTML");
 
         billEntity.setBillItems(parseBillItems());
 

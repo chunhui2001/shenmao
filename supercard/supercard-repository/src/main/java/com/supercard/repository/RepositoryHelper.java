@@ -21,8 +21,8 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 public class RepositoryHelper {
 
     private static final CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-//    private static final String _mongoServerHost = "localhost";
-    private static final String _mongoServerHost = "192.168.189.197";
+    private static final String _mongoServerHost = "localhost";
+//    private static final String _mongoServerHost = "192.168.189.197";
     private static final int _mongoPort = 27017;
     private static final String _dbname = "supercard_db";
     private static final String _usename = "root";
@@ -37,7 +37,8 @@ public class RepositoryHelper {
 
     public static MongoCollection<BillEntity>  getCollection(String docname, Class<BillEntity> tClass) {
 
-        MongoClient mongoClient = getMongoClientWithAuth();
+//        MongoClient mongoClient = getMongoClientWithAuth();
+        MongoClient mongoClient = getMongoClientNormal();
         MongoDatabase database = mongoClient.getDatabase(_dbname);
         return database.getCollection(docname, tClass);
 

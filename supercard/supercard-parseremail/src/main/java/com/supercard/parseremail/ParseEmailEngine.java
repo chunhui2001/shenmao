@@ -13,7 +13,9 @@ import javax.mail.search.AndTerm;
 import javax.mail.search.FromStringTerm;
 import javax.mail.search.OrTerm;
 import javax.mail.search.SubjectTerm;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Properties;
 
 public class ParseEmailEngine {
@@ -24,49 +26,8 @@ public class ParseEmailEngine {
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
-        Properties props = new Properties() {{
-            setProperty("mail.pop3.host", "pop.qq.com");
-            setProperty("mail.pop3.port", "995");
-        }};
-
-        // SSL安全连接参数
-        props.setProperty("mail.pop3.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        props.setProperty("mail.pop3.socketFactory.fallback", "true");
-        props.setProperty("mail.pop3.socketFactory.port", "995");
-
-        Session session = Session.getDefaultInstance(props, null);
-        Store store = null;
-        Folder folder = null;
-        // Message message[] = folder.getMessages();
-        Message message[] = new Message[0];
-
-        try {
-
-            store = session.getStore("pop3");
-            store.connect(host, email, password);
-            folder = store.getFolder("INBOX");
-            folder.open(Folder.READ_ONLY);
-            message = folder.search(new AndTerm(
-                    new OrTerm(
-                            new FromStringTerm[]{
-                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的, 新账单无明细，只能通过app查看
-//                                    new FromStringTerm("中信银行"),
-//                                    new FromStringTerm("交通银行"),
-//                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
-//                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
-                            }),
-                    new OrTerm(
-                            new SubjectTerm[]{
-                                    new SubjectTerm("账单")
-                            })));
-
-        } catch (NoSuchProviderException e) {
-            e.printStackTrace();
-        } catch (MessagingException e) {
-
-        }
-
-
+        ParseEmailEngineHelper parseEmailEngineHelper = new ParseEmailEngineHelper(email, password);
+        Message message[] = parseEmailEngineHelper.search();
 
         System.out.println("邮件数量:　" + message.length);
 
@@ -75,16 +36,8 @@ public class ParseEmailEngine {
         for (int i = 0; i < message.length; i++) {
 
             MimeMessage mimeMessage = (MimeMessage) message[i];
-            String from = null;
-
-            try {
-                parser = new MimeMessageParser(mimeMessage).parse();
-                from = parser.getFrom();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-
+            parser = parseEmailEngineHelper.getParser(mimeMessage);
+            String from = parser.getFrom();
 
             Collection<BillEntity> billEntityList = null;
 
@@ -134,7 +87,7 @@ public class ParseEmailEngine {
             new BillRepository().save(billEntityList);
 
             try {
-                System.out.println(new ObjectMapper().writeValueAsString(billEntityList));
+                System.out.println( new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()) + new ObjectMapper().writeValueAsString(billEntityList));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
@@ -142,12 +95,7 @@ public class ParseEmailEngine {
 
         }
 
-        try {
-            folder.close(true);
-            store.close();
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
+        parseEmailEngineHelper.release();
 
 
         System.out.println("");
