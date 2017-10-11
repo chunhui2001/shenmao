@@ -22,7 +22,6 @@ public class ParseEmailEngine {
 
     public static void run() throws Exception {
 
-        String host = "pop.qq.com";
         String email = "76920104@qq.com";
         String password = "ujwljrfbjdydbigc";
 
@@ -32,6 +31,7 @@ public class ParseEmailEngine {
         System.out.println("邮件数量:　" + message.length);
 
         MimeMessageParser parser = null;
+        BillRepository billRepository = new BillRepository(null);
 
         for (int i = 0; i < message.length; i++) {
 
@@ -42,7 +42,6 @@ public class ParseEmailEngine {
             Collection<BillEntity> billEntityList = null;
 
             System.out.println("");
-
 
             try {
 
@@ -84,21 +83,22 @@ public class ParseEmailEngine {
             }
 
             // save
-            new BillRepository().save(billEntityList);
+            billRepository.save(billEntityList);
 
             try {
                 System.out.println( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + new ObjectMapper().writeValueAsString(billEntityList));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
+
             System.out.println("============== *************** ==============");
 
         }
 
         parseEmailEngineHelper.release();
 
-
         System.out.println("");
         System.out.println("DONE! Parse email bills completed! DONE!");
+
     }
 }

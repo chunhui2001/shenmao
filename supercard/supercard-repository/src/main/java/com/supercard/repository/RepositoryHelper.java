@@ -11,22 +11,53 @@ import com.supercard.tour.BillItemEntity;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 public class RepositoryHelper {
 
-    private static final CodecRegistry pojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
-    private static final String _mongoServerHost = "localhost";
-//    private static final String _mongoServerHost = "192.168.189.197";
-    private static final int _mongoPort = 27017;
-    private static final String _dbname = "supercard_db";
-    private static final String _usename = "root";
-    private static final String _passwd = "Cc";
+    private static final CodecRegistry _PojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
+
+    //    private static final String _mongoServerHost = "localhost";
+    private String _mongoServerHost = "192.168.189.197";
+    private Integer _mongoPort = 27017;
+    private String _dbname = "supercard_db";
+    private String _usename = null;
+    private String _passwd = null;
+
+    public RepositoryHelper(String env) {
+
+        Properties prop = new Properties();
+
+        try {
+
+            InputStream in = this.getClass().getClassLoader().getResourceAsStream("env." + env +".properties");
+            prop.load(in);
+            Iterator<String> it=prop.stringPropertyNames().iterator();
+
+            while(it.hasNext()){
+
+                String key=it.next();
+
+                if (key.equals("mongo_server_host")) _mongoServerHost = prop.getProperty(key);
+                if (key.equals("mongo_port")) _mongoPort = Integer.parseInt(prop.getProperty(key));
+                if (key.equals("mongo_dbname")) _dbname = prop.getProperty(key);
+                if (key.equals("mongo_usename")) _usename = prop.getProperty(key);
+                if (key.equals("mongo_passwd")) _passwd = prop.getProperty(key);
+
+            }
+
+            in.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // use admin;
     // db.createUser({user:'root', pwd: 'Cc', roles: ['root']});
@@ -35,29 +66,28 @@ public class RepositoryHelper {
     // use supercard_db;
     // db.createUser({user:'root', pwd: 'Cc', roles: ['readWrite','dbAdmin']});
 
-    public static MongoCollection<BillEntity>  getCollection(String docname, Class<BillEntity> tClass) {
+    public MongoCollection<BillEntity>  getCollection(String docname, Class<BillEntity> tClass) {
 
-//        MongoClient mongoClient = getMongoClientWithAuth();
-        MongoClient mongoClient = getMongoClientNormal();
+        MongoClient mongoClient = _passwd == null ? getMongoClientNormal() : getMongoClientWithAuth();
         MongoDatabase database = mongoClient.getDatabase(_dbname);
         return database.getCollection(docname, tClass);
 
     }
 
-    public static MongoClient getMongoClientWithAuth() {
+    public MongoClient getMongoClientWithAuth() {
 
         return new MongoClient(
-                new ServerAddress(_mongoServerHost,_mongoPort),      // server address
+                new ServerAddress(_mongoServerHost, _mongoPort),      // server address
                 Arrays.asList(MongoCredential.createScramSha1Credential(_usename, _dbname, _passwd.toCharArray())),     // credential
-                MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build());     // options
+                MongoClientOptions.builder().codecRegistry(_PojoCodecRegistry).build());     // options
 
     }
 
-    public static MongoClient getMongoClientNormal() {
+    public MongoClient getMongoClientNormal() {
 
         return new MongoClient(
                 new ServerAddress(_mongoServerHost,_mongoPort),
-                MongoClientOptions.builder().codecRegistry(pojoCodecRegistry).build());
+                MongoClientOptions.builder().codecRegistry(_PojoCodecRegistry).build());
 
     }
 

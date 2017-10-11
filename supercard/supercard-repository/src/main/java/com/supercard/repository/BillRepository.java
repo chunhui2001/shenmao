@@ -29,11 +29,16 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 public class BillRepository
 {
 
+//    private String defaultEnv = "local";
+    private String defaultEnv = "dev";
+    private RepositoryHelper repositoryHelper = new RepositoryHelper(defaultEnv);
+
     private static final String _billDocumentName = "bill";
     private MongoCollection<BillEntity> billCollection = null;
 
-    public BillRepository() {
-        billCollection = RepositoryHelper.getCollection(_billDocumentName, BillEntity.class);
+    public BillRepository(String env) {
+        if (env != null && !env.equals(defaultEnv)) repositoryHelper = new RepositoryHelper(env);
+        billCollection = repositoryHelper.getCollection(_billDocumentName, BillEntity.class);
     }
 
     public List<BillEntity> lists(String bank) {
