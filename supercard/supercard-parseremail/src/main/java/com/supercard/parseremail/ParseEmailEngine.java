@@ -66,7 +66,7 @@ public class ParseEmailEngine {
                         System.out.println("============== " + from + " [招商 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCmbEmail(email, mimeMessage, parser).parse();
                         break;
-                    case "citibank@emailmgmt.china.citibank.com":
+                    case "alerts@citibank.com":
                         System.out.println("============== " + from + " [花旗 FOCUS][" + (i + 1) + "] ==============");
                         billEntityList = new ParseCitiBankEmail(email, mimeMessage, parser).parse();
                         break;
@@ -86,7 +86,7 @@ public class ParseEmailEngine {
             billRepository.save(billEntityList);
 
             try {
-                System.out.println( new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + new ObjectMapper().writeValueAsString(billEntityList));
+                System.out.println( "[" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + "] " + new ObjectMapper().writeValueAsString(billEntityList));
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }

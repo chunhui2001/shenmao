@@ -26,12 +26,10 @@ import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-public class BillRepository
+public class BillRepository extends BaseRepository
 {
 
 //    private String defaultEnv = "local";
-    private String defaultEnv = "dev";
-    private RepositoryHelper repositoryHelper = new RepositoryHelper(defaultEnv);
 
     private static final String _billDocumentName = "bill";
     private MongoCollection<BillEntity> billCollection = null;

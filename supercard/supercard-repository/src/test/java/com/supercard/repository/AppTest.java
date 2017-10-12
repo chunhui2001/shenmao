@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class AppTest extends TestCase
 {
 
-    BillRepository billItemRepository = new BillRepository(null);
+//    BillRepository billItemRepository = new BillRepository("local");
 
     public AppTest( String testName )
     {

@@ -62,8 +62,10 @@ public abstract class ParseEmailBase {
         this.subject = parser.getSubject();
         this.contentType = message.getContentType();
         this.content = parser.getHtmlContent();
-        this.emailHtmlDoc = Jsoup.parse(content);
+        this.emailHtmlDoc = content == null ? null : Jsoup.parse(content);
 //        this.receivDate = message.getReceivedDate();
+
+        if (this.content == null) this.content = parser.getPlainContent();
 
         this.receivDate = message.getSentDate();
 

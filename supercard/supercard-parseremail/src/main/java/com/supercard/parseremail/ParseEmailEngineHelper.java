@@ -113,16 +113,17 @@ public class ParseEmailEngineHelper {
                     new OrTerm(
                             new FromStringTerm[]{
 
-//                                    new FromStringTerm("alerts"),           // 花旗
+                                    new FromStringTerm("alerts"),           // 花旗
 //                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的, 新账单无明细，只能通过app查看
 //                                    new FromStringTerm("中信银行"),
 //                                    new FromStringTerm("交通银行"),
 //                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
-                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
+//                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
                             }),
                     new OrTerm(
                             new SubjectTerm[]{
-                                    new SubjectTerm("账单")
+                                    new SubjectTerm("账单"),
+                                    new SubjectTerm("花旗银行信用卡账单提醒")
                             })));
 
         } catch (NoSuchProviderException e) {
@@ -138,7 +139,7 @@ public class ParseEmailEngineHelper {
         try {
             if (!this._folder.isOpen()) {
                 this._folder.open(Folder.READ_ONLY);
-                System.out.println("folder not opened");
+                System.out.println("The folder not open, opened again: " + this._folder.isOpen());
             }
             return new MimeMessageParser(mimeMessage).parse();
         } catch (Exception e) {
