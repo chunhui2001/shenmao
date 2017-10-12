@@ -114,16 +114,15 @@ public class ParseEmailEngineHelper {
                             new FromStringTerm[]{
 
                                     new FromStringTerm("alerts"),           // 花旗
-//                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的, 新账单无明细，只能通过app查看
-//                                    new FromStringTerm("中信银行"),
-//                                    new FromStringTerm("交通银行"),
-//                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
-//                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
+                                    new FromStringTerm("广发银行"),     // 补发的账单是以PDF附件形式发送的, 新账单无明细，只能通过app查看
+                                    new FromStringTerm("中信银行"),
+                                    new FromStringTerm("交通银行"),
+                                    new FromStringTerm("招商银行"),     // 有的对账单在邮件里面只有到期还款日和还款金额，需要在网页内登陆查看账单详细信息
+                                    new FromStringTerm("浦发银行")      // 邮件内是一个链接地址
                             }),
                     new OrTerm(
                             new SubjectTerm[]{
-                                    new SubjectTerm("账单"),
-                                    new SubjectTerm("花旗银行信用卡账单提醒")
+                                    new SubjectTerm("账单")
                             })));
 
         } catch (NoSuchProviderException e) {
