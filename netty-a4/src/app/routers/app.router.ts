@@ -13,17 +13,17 @@ import { AuthGuard } from '../_services/auth.guard.service';
 
 export const router: Routes = [
   { path: '', redirectTo: 'index', pathMatch: 'full' },
-  { path: 'c/login', component: LoginComponent },
-  { path: 'c/signup', component: SignupComponent },
-  { path: 'c/login-email', component: LoginEmailComponent },
+  { path: '_c/login', component: LoginComponent },
+  { path: '_c/signup', component: SignupComponent },
+  { path: '_c/login-email', component: LoginEmailComponent },
   // { path: 'members', component: MembersComponent, canActivate: [AuthGuard] },
-  { path: '_c/members', component: MembersComponent, canActivate: [AuthGuard] },
+  { path: '_c/members', component: MembersComponent },
 
 
 
   { path: '404', component: IndexComponent },
   { path: 'index', component: IndexComponent },
-  { path: 'members', component: MembersComponent, canActivate: [AuthGuard] },
+  { path: 'members', component: MembersComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registry', component: SignupComponent },
   { path: 'login-email', component: LoginEmailComponent },

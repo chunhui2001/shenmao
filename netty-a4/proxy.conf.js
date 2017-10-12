@@ -9,7 +9,8 @@ const PROXY_CONFIG = [
       "/gallery",
       "/assets",
       "/404",
-      "/members"
+      "/members",
+      "/bills"
     ],
     target: "http://localhost:8844",
     secure: false,

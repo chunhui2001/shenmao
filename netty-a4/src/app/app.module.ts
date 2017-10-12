@@ -8,6 +8,7 @@ import { MdIconModule, MdToolbarModule, MdMenuModule, MdCardModule, MdButtonModu
 
 // services
 import { AuthGuard, AuthenticationService, UserService } from './_services/_index';
+// import { AuthenticationService, UserService } from './_services/_index';
 
 // directives
 import { UserInfoCardDirective } from './_directives/_index';

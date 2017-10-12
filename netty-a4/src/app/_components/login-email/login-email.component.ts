@@ -28,12 +28,15 @@ export class LoginEmailComponent implements OnInit {
     }
 
     this.auth.login(formData.controls.email._value, formData.controls.password._value ).subscribe(
-      error => {
-        if (error) {
-          this.error = error;
+      response => {
+
+        if (response.error) {
+          this.error = response.message[0];
           return;
         }
-        window.location.href = 'index';
+
+        window.location.href = response.message.length > 0 ? response.message[0] : 'index';
+
       }
     );
 

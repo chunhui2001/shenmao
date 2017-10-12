@@ -18,20 +18,20 @@ export class AuthenticationService {
 
   }
 
-  login(username: string, password: string): Observable<String> {
+  login(username: string, password: string): Observable<RestResponse> {
 
-    return this.http.post('/login', { username: username, password: password })
+    return this.http.post('/login.json', { username: username, password: password })
       .map((response: RestResponse) => {
-
+debugger;
           if (response.error) {
-            return response.message[0];
+            return response;
           }
 
           this.user = response.data;
 
           // save user info to localStorage
           localStorage.setItem('user', JSON.stringify(this.user));
-          return null;
+          return response;
       });
 
   }
