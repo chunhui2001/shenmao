@@ -1,6 +1,7 @@
 package com.supercard.tour;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.bson.types.ObjectId;
@@ -31,8 +32,11 @@ public final class BillEntity {
     private String bank;
     private String currency;
     private String subject;
+
+    @JsonIgnore
     private String billContent;
-    private String contentType;     // html, pdf,
+
+    private String contentType;     // html, pdf, text
 
 
     public ObjectId getId() {

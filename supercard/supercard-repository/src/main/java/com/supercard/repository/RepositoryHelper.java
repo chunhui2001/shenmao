@@ -21,7 +21,7 @@ public class RepositoryHelper {
 
     private static final CodecRegistry _PojoCodecRegistry = fromRegistries(MongoClient.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
-    //    private static final String _mongoServerHost = "localhost";
+    // Will be override by env.*.properties inside resources folder
     private String _mongoServerHost = "192.168.189.197";
     private Integer _mongoPort = 27017;
     private String _dbname = "supercard_db";
