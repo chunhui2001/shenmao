@@ -73,5 +73,6 @@
     <module>supercard-tour</module>
     <module>supercard-lab</module>
     <module>supercard-refactor</module>
+    <module>supercard-nettya4</module>
   </modules>
 </project>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+
+    <title>{% block pagetitle %}SupperExpress{% endblock %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+     <!--Font Icons: https://material.io/icons/-->
+    <link media="all" type="text/css" rel="stylesheet"
+          href="/assets/google-material-icons.css">
+
+    <!-- Foundation Flex: https://cdnjs.com/libraries/foundation/6.3.0 -->
+    <link media="all" type="text/css" rel="stylesheet"
+          href="/assets/foundation-flex-6.3.0.min.css">
+
+    <style type="text/css">
+
+        body {
+            width:90%;
+            max-width: 1440px;
+            margin: auto;
+            margin-bottom: 1em;
+        }
+
+        .button {
+            cursor: pointer;
+        }
+
+        .button, .button:hover, button:focus {
+            outline:0 !important;
+            -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+            -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.35);
+        }
+
+        .button:active {
+            /*background-color: #3e8e41;*/
+            /*box-shadow: 0 5px #666;*/
+            transform: translateY(1px);
+            /*color:red !important;*/
+        }
+
+        /*a:link {color:#FF0000;}    !* unvisited link, same as regular 'a' *!*/
+        /*a:hover {color:#FF00FF;}   !* mouse over link *!*/
+        /*a:focus {color:#0000FF;}   !* link has focus *!*/
+        /*a:active {color:#0000FF;}  !* selected link *!*/
+        /*a:visited {color:#00FF00;} !* visited link *!*/
+
+
+
+        .error {
+            padding: .1em .5em;
+            margin-bottom: 0.5em;
+            background-color: burlywood;
+            color: brown;
+            display: inline-block;
+        }
+
+    </style>
+
+</head>
+<body>
+
+
+    <div class="n-header">
+        <div style="text-align: left;">
+
+            <a href="/index">首页</a>
+
+            {% if (user.isAuthenticated()) %}
+                <a href="/logout">退出</a>
+                <a href="/account">个人信息</a>
+                <a href="/members">所有用户</a>
+                <a href="/bills">我的账单</a> &emsp;
+
+            {% else %}
+                <a href="/login">登录</a>
+                <a href="/registry">用户注册</a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="main-content">
+        {% block maincontent %}
+        {% endblock %}
+    </div>
+
+    <script type="text/javascript" src="/jquery/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/jquery/jquery-3.2.0.slim.min.js"></script>
+
+    <!-- web-animations: https://cdnjs.com/libraries/web-animations/2.2.2 -->
+    <script type="text/javascript"
+            src="/assets/web-animations-2.2.2.min.js"></script>
+
+    <script type="text/javascript" src="/assets/inline.bundle.js"></script>
+    <script type="text/javascript" src="/assets/polyfills.bundle.js"></script>
+    <script type="text/javascript" src="/assets/styles.bundle.js"></script>
+    <script type="text/javascript" src="/assets/vendor.bundle.js"></script>
+    <script type="text/javascript" src="/assets/main.bundle.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends "layouts/layout_default.html" %}
+
+{% block pagetitle %}首页{% endblock %}
+
+{% block maincontent %}
+
+{% if (user.isAuthenticated()) %}
+<div>
+    <p>
+        <img style="width: 80px;" src="{{user.profile}}" />
+    </p>
+    <p><span>ID: </span> <span>{{ user.userId }}</span></p>
+    <p><span>Name: </span> <span>{{ user.userName }}</span></p>
+    <p><span>Lasted Login At: </span> <span>{{ user.lastLogin }}</span></p>
+</div>
+<h3>你好：<b>{{ user.userName }}</b>, 你的最后一次登录时间是：{{ user.lastLogin }}</h3>
+{% else %}
+<h3>
+    未登陆
+</h3>
+{% endif %}
+
+
+<app-root></app-root>
+{% endblock %}
