@@ -18,55 +18,16 @@
 
 
 
-  <properties>
-    <log4j.version>2.8.2</log4j.version>
-  </properties>
 
   <dependencies>
 
-
-    <!-- google -->
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>23.0</version>
-    </dependency>
-
-    <!-- logger -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.22</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-jcl</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-
-
+    <!-- netty -->
     <dependency>
       <groupId>io.netty</groupId>
       <artifactId>netty-all</artifactId>
       <!--<version>4.0.21.Final</version>-->
       <version>5.0.0.Alpha2</version>
     </dependency>
-
 
     <!-- template -->
     <dependency>
@@ -75,18 +36,8 @@
       <version>5.85.3.RELEASE</version>
     </dependency>
 
-    <dependency>
-      <groupId>org.reflections</groupId>
-      <artifactId>reflections</artifactId>
-      <version>0.9.11</version>
-    </dependency>
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.6.4</version>
-    </dependency>
 
-
+    <!-- redis -->
     <dependency>
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
@@ -97,7 +48,7 @@
 
 
 
-
+    <!-- local modules -->
     <dependency>
       <groupId>com.supercard.tour</groupId>
       <artifactId>supercard-tour</artifactId>

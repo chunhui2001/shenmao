@@ -23,37 +23,11 @@
   <!--mvn dependency:tree -Ddetail=true-->
   <dependencies>
 
-
-    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
-    <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>commons-email</artifactId>
-      <version>1.5</version>
-    </dependency>
-
-    <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
-    <dependency>
-      <groupId>org.jsoup</groupId>
-      <artifactId>jsoup</artifactId>
-      <version>1.10.3</version>
-    </dependency>
-
-
-
-    <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpclient</artifactId>
-      <version>4.5.3</version>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
       <version>2.0.4</version>
     </dependency>
-
-
 
     <!-- https://mvnrepository.com/artifact/org.quartz-scheduler/quartz -->
     <dependency>
@@ -61,40 +35,6 @@
       <artifactId>quartz</artifactId>
       <version>2.1.5</version>
     </dependency>
-
-
-    <!-- logger -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>1.7.22</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-slf4j-impl</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-jcl</artifactId>
-      <version>${log4j.version}</version>
-    </dependency>
-
-    <!--<dependency>-->
-      <!--<groupId>org.slf4j</groupId>-->
-      <!--<artifactId>slf4j-log4j12</artifactId>-->
-      <!--<version>1.6.6</version>-->
-    <!--</dependency>-->
 
 
     <dependency>
