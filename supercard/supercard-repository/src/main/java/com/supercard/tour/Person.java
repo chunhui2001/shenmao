@@ -1,4 +1,4 @@
-package com.supercard.repository.tour;
+package com.supercard.tour;
 
 import org.bson.types.ObjectId;
 

@@ -2,16 +2,12 @@ package com.supercard.repository;
 
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
-import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
-import com.supercard.repository.tour.Address;
-import com.supercard.repository.tour.Person;
-import org.bson.Document;
+import com.supercard.tour.Address;
+import com.supercard.tour.Person;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
-
-import java.util.Arrays;
 
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;

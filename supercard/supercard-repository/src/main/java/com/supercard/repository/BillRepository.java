@@ -1,23 +1,13 @@
 package com.supercard.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.BasicDBObject;
 import com.mongodb.Block;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientOptions;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.supercard.repository.tour.Person;
 import com.supercard.tour.BillEntity;
-import com.supercard.tour.BillItemEntity;
-import org.bson.codecs.configuration.CodecRegistry;
-import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +24,7 @@ public class BillRepository extends BaseRepository
     private static final String _billDocumentName = "bill";
     private MongoCollection<BillEntity> billCollection = null;
 
-    public BillRepository(String env) {
+    private BillRepository(String env) {
         if (env != null && !env.equals(defaultEnv)) repositoryHelper = new RepositoryHelper(env);
         billCollection = repositoryHelper.getCollection(_billDocumentName, BillEntity.class);
     }
@@ -95,6 +85,10 @@ public class BillRepository extends BaseRepository
             this.save(bill);
         });
 
+    }
+
+    public static BillRepository newInstance() {
+        return new BillRepository(null);
     }
 
 }

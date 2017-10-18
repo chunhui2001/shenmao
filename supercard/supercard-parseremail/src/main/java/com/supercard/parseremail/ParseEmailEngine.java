@@ -31,7 +31,7 @@ public class ParseEmailEngine {
         System.out.println("邮件数量:　" + message.length);
 
         MimeMessageParser parser = null;
-        BillRepository billRepository = new BillRepository(null);
+        BillRepository billRepository = BillRepository.newInstance();
 
         for (int i = 0; i < message.length; i++) {
 

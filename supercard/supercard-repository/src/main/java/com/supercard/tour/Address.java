@@ -1,4 +1,4 @@
-package com.supercard.repository.tour;
+package com.supercard.tour;
 
 /**
  * The Address POJO
