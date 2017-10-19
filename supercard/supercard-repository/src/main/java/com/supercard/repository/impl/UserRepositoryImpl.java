@@ -64,6 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
             setLastLogin(null);
             setLastUpdated(new Date());
             setUserRoles(new ArrayList<UserRoleEnum>() {{
+                add(UserRoleEnum.ROLE_USER);
                 add(UserRoleEnum.ROLE_USER_VIP);
             }});
         }});
