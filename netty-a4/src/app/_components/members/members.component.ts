@@ -36,6 +36,7 @@ export class MembersComponent implements OnInit {
 
     if (this.userId) {
       this.userService.find(this.userId).subscribe(data => {
+        if (!data) { return; }
         this.user = data;
         this.user.createdAt = this.dateFormatPipeFilter.transform(this.user.createdAt, 'f1');
       });

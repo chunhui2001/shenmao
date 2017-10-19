@@ -1,6 +1,4 @@
 <div *ngIf="!userId">
-
-
   <md-card *ngFor="let user of (userList ? userList : []); let i=index" class="example-card">
     <md-card-header>
       <div md-card-avatar class="example-header-image"
@@ -25,16 +23,17 @@
       <!--<button md-button>LIKE</button>-->
       <!--<button md-button>SHARE</button>-->
     <!--</md-card-actions>-->
-
-
-
   </md-card>
-
 </div>
+
 <div *ngIf="userId && user">
   <p>{{user.userId}}</p>
   <p>{{user.userName}}</p>
   <p>{{user.photo}}</p>
   <p>{{user.createdAt}}</p>
+</div>
+
+<div *ngIf="userId && !user">
+  <p>用户不存在！</p>
 </div>
 

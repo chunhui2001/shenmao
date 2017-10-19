@@ -7,7 +7,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdIconModule, MdToolbarModule, MdMenuModule, MdCardModule, MdButtonModule } from '@angular/material';
 
 // services
-import { AuthGuard, AuthenticationService, UserService } from './_services/_index';
+import { AuthGuard, AuthenticationService, UserService,
+         BillService } from './_services/_index';
 // import { AuthenticationService, UserService } from './_services/_index';
 
 // directives
@@ -47,7 +48,7 @@ import { DateFormatPipe } from './_pipelines/_index';
   ],
   providers: [
     AuthGuard,
-    AuthenticationService, UserService
+    AuthenticationService, UserService, BillService
   ],
   bootstrap: [AppComponent]
 })

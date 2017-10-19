@@ -5,3 +5,9 @@
 body {
   background-color: #ECEFF1;
 }
+
+/** google material reset **/
+.mat-card-header-text {
+  width: 100%;
+}
+/** end google material reset **/

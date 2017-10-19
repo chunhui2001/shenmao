@@ -21,6 +21,6 @@ export class UserInfoCardDirective implements OnInit {
   ngOnInit() {
     const shadowStr = `${ this.appShadowX } ${ this.appShadowY } ${ this.appShadowBlur } ${ this.appShadow }`;
     this.renderer.setStyle(this.elem.nativeElement, 'box-shadow', shadowStr);
-
+    this.renderer.setStyle(this.elem.nativeElement, 'padding', '1px 3px');
   }
 }
