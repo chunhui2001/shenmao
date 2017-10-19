@@ -15,7 +15,9 @@ import { UserInfoCardDirective } from './_directives/_index';
 
 // components
 import { AppComponent } from './app.component';
-import { LoginComponent, SignupComponent, LoginEmailComponent, MembersComponent, IndexComponent } from './_components/_index';
+import { LoginComponent, SignupComponent,
+         LoginEmailComponent, MembersComponent,
+         BillsComponent, IndexComponent } from './_components/_index';
 
 
 import { routers } from './routers/app.router';
@@ -33,6 +35,7 @@ import { DateFormatPipe } from './_pipelines/_index';
     LoginEmailComponent,
     MembersComponent,
     IndexComponent,
+    BillsComponent,
 
     DateFormatPipe
   ],

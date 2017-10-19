@@ -5,12 +5,16 @@ const PROXY_CONFIG = [
       "/account",
       "/logout",
       "/login",
-      "/jquery",
-      "/gallery",
-      "/assets",
       "/404",
       "/members",
-      "/bills"
+      "/bills",
+
+      "/assets",
+      "/libs",
+      "/fonts",
+      "/jquery",
+      "/gallery"
+
     ],
     target: "http://localhost:8844",
     secure: false,
