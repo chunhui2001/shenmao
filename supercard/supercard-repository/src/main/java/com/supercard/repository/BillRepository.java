@@ -33,7 +33,31 @@ public class BillRepository extends BaseRepository
 
         List<BillEntity> result = new ArrayList<>();
 
-        billCollection.find(eq("bank", bank)).sort(new BasicDBObject("billMonth", -1)).forEach(new Block<BillEntity>() {
+        BasicDBObject sortBasicDBObject = new BasicDBObject();
+        sortBasicDBObject.append("billMonth", -1);
+
+        billCollection.find(eq("bank", bank)).sort(sortBasicDBObject).forEach(new Block<BillEntity>() {
+            @Override
+            public void apply(final BillEntity billEntity) {
+                result.add(billEntity);
+            }
+        });
+
+        return result;
+
+    }
+
+
+    public List<BillEntity> lists() {
+
+        List<BillEntity> result = new ArrayList<>();
+
+        BasicDBObject sortBasicDBObject = new BasicDBObject();
+
+        sortBasicDBObject.append("bank", -1);
+        sortBasicDBObject.append("billMonth", -1);
+
+        billCollection.find().sort(sortBasicDBObject).forEach(new Block<BillEntity>() {
             @Override
             public void apply(final BillEntity billEntity) {
                 result.add(billEntity);
