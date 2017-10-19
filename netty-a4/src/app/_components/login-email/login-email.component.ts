@@ -17,6 +17,9 @@ export class LoginEmailComponent implements OnInit {
   state: String = '';
   error: any;
 
+  email: String;
+  password: String;
+
   constructor( private auth: AuthenticationService, private router: Router ) {
 
   }
@@ -34,7 +37,7 @@ export class LoginEmailComponent implements OnInit {
           this.error = response.message[0];
           return;
         }
-
+debugger;
         window.location.href = response.message.length > 0 ? response.message[0] : 'index';
 
       }
