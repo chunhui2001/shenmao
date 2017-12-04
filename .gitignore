@@ -49,3 +49,7 @@ firebase
 repo
 
 target
+*.iml
+logs
+.idea
+dependency-reduced-pom.xml
